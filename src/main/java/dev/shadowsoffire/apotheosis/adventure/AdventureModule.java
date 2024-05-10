@@ -87,8 +87,6 @@ public class AdventureModule {
     public static final boolean STAGES_LOADED = ModList.get().isLoaded("gamestages");
     static final Map<ResourceLocation, LootCategory> IMC_TYPE_OVERRIDES = new HashMap<>();
 
-    public static final StructureProcessorType<ItemFrameGemsProcessor> ITEM_FRAME_LOOT = () -> ItemFrameGemsProcessor.CODEC;
-
     public AdventureModule() {
         Adventure.bootstrap();
     }
