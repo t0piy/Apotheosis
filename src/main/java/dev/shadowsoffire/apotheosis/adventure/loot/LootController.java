@@ -65,7 +65,7 @@ public class LootController {
         Map<DynamicHolder<? extends Affix>, AffixInstance> loaded = new HashMap<>();
         List<AffixInstance> nameList = new ArrayList<>(selected.size());
         for (DynamicHolder<Affix> a : selected) {
-            AffixInstance inst = new AffixInstance(a, stack, RarityRegistry.INSTANCE.holder(rarity), rand.nextFloat());
+            AffixInstance inst = new AffixInstance(stack, RarityRegistry.INSTANCE.holder(rarity), a, rand.nextFloat(), false);
             loaded.put(a, inst);
             nameList.add(inst);
         }
@@ -79,7 +79,7 @@ public class LootController {
         }
 
         if (durability > 0) {
-            loaded.put(Affixes.DURABLE, new AffixInstance(Affixes.DURABLE, stack, RarityRegistry.INSTANCE.holder(rarity), durability + AffixHelper.step(-0.07F, 14, 0.01F).get(rand.nextFloat())));
+            loaded.put(Affixes.DURABLE, new AffixInstance(stack, RarityRegistry.INSTANCE.holder(rarity), Affixes.DURABLE, durability + AffixHelper.step(-0.07F, 14, 0.01F).get(rand.nextFloat()), false));
         }
 
         jRand.setSeed(rand.nextLong());

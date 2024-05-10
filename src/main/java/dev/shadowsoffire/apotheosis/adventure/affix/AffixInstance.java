@@ -10,7 +10,9 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -34,7 +36,11 @@ import net.minecraft.world.phys.HitResult;
  * An Affix Instance is a wrapper around the necessary parameters for all affix methods.<br>
  * Prefer using this over directly invoking methods on {@link Affix}.
  */
-public record AffixInstance(DynamicHolder<? extends Affix> affix, ItemStack stack, DynamicHolder<LootRarity> rarity, float level) {
+public record AffixInstance(ItemStack stack, DynamicHolder<LootRarity> rarity, DynamicHolder<? extends Affix> affix, float level, boolean locked) {
+
+    public static final String TAG_AFFIX = "affix";
+    public static final String TAG_LEVEL = "level";
+    public static final String TAG_LOCKED = "locked";
 
     public boolean isValid() {
         return this.affix.isBound() && this.rarity.isBound();
@@ -166,5 +172,27 @@ public record AffixInstance(DynamicHolder<? extends Affix> affix, ItemStack stac
      */
     public void modifyLoot(ObjectArrayList<ItemStack> loot, LootContext ctx) {
         this.afx().modifyLoot(this.stack, this.rty(), this.level, loot, ctx);
+    }
+
+    /**
+     * Serializes this affix instance. The serialized form of an affix instance
+     * retains the affix, level, and locked state, but does not retain the context item stack.
+     */
+    public CompoundTag save() {
+        CompoundTag tag = new CompoundTag();
+        tag.putString(TAG_AFFIX, this.affix.getId().toString());
+        tag.putFloat(TAG_LEVEL, this.level);
+        tag.putBoolean(TAG_LOCKED, this.locked);
+        return tag;
+    }
+
+    /**
+     * Loads an affix instance from the given compound tag, with the context item stack and rarity.
+     */
+    public static AffixInstance load(ItemStack stack, DynamicHolder<LootRarity> rarity, CompoundTag tag) {
+        DynamicHolder<? extends Affix> affix = AffixRegistry.INSTANCE.holder(new ResourceLocation(tag.getString(TAG_AFFIX)));
+        float level = tag.getFloat(TAG_LEVEL);
+        boolean locked = tag.getBoolean(TAG_LOCKED);
+        return new AffixInstance(stack, rarity, affix, level, locked);
     }
 }

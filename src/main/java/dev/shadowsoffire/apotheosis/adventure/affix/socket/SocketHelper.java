@@ -162,7 +162,7 @@ public class SocketHelper {
         int sockets = getSockets(stack);
         if (sockets > 0) {
             // The rarity is irrelevant for the socket affix, so we always pass the min rarity to the fake affix instance.
-            affixes.put(Affixes.SOCKET, new AffixInstance(Affixes.SOCKET, stack, RarityRegistry.getMinRarity(), sockets));
+            affixes.put(Affixes.SOCKET, new AffixInstance(stack, RarityRegistry.getMinRarity(), Affixes.SOCKET, sockets, false));
         }
     }
 
@@ -170,7 +170,7 @@ public class SocketHelper {
         CompoundTag afxData = arrow.getPersistentData().getCompound(AFFIX_DATA);
         int sockets = afxData != null ? afxData.getInt(SOCKETS) : 0;
         if (sockets > 0) {
-            affixes.put(Affixes.SOCKET, new AffixInstance(Affixes.SOCKET, ItemStack.EMPTY, RarityRegistry.getMinRarity(), sockets));
+            affixes.put(Affixes.SOCKET, new AffixInstance(ItemStack.EMPTY, RarityRegistry.getMinRarity(), Affixes.SOCKET, sockets, false));
         }
     }
 
