@@ -65,7 +65,7 @@ public class ExtendedInvTrigger extends InventoryChangeTrigger {
             return new ItemPredicate[] { new TrueItemPredicate(s -> s.getItem() == Adventure.Items.GEM.get() && rarity.isBound() && AffixHelper.getRarity(s) == rarity) };
         }
         if ("socket".equals(type)) {
-            return new ItemPredicate[] { new TrueItemPredicate(s -> SocketHelper.getGems(s).stream().anyMatch(gem -> !gem.isEmpty())) };
+            return new ItemPredicate[] { new TrueItemPredicate(s -> SocketHelper.getGems(s).stream().anyMatch(gem -> gem.isValid())) };
         }
         if ("nbt".equals(type)) {
             CompoundTag tag;

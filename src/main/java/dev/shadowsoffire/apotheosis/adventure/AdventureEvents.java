@@ -3,12 +3,15 @@ package dev.shadowsoffire.apotheosis.adventure;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.google.common.base.Predicates;
+
 import dev.shadowsoffire.apotheosis.Apoth;
 import dev.shadowsoffire.apotheosis.Apotheosis.ApotheosisCommandEvent;
 import dev.shadowsoffire.apotheosis.adventure.Adventure.Items;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.TelepathicAffix;
+import dev.shadowsoffire.apotheosis.adventure.affix.socket.SocketHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.GemRegistry;
 import dev.shadowsoffire.apotheosis.adventure.commands.BossCommand;
 import dev.shadowsoffire.apotheosis.adventure.commands.CategoryCheckCommand;
@@ -75,6 +78,8 @@ public class AdventureEvents {
     public void affixModifiers(ItemAttributeModifierEvent e) {
         ItemStack stack = e.getItemStack();
         if (stack.hasTag()) {
+            SocketHelper.getGems(stack).addModifiers(LootCategory.forItem(stack), e.getSlotType(), e::addModifier);
+
             var affixes = AffixHelper.getAffixes(stack);
             affixes.forEach((afx, inst) -> inst.addModifiers(e.getSlotType(), e::addModifier));
         }
@@ -94,18 +99,18 @@ public class AdventureEvents {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void fireArrow(EntityJoinLevelEvent e) {
         if (e.getEntity() instanceof AbstractArrow arrow && !arrow.getPersistentData().getBoolean("apoth.generated")) {
-            Entity shooter = arrow.getOwner();
-            if (shooter instanceof LivingEntity living) {
-                ItemStack bow = living.getUseItem();
+            if (arrow.getOwner() instanceof LivingEntity user) {
+                ItemStack bow = user.getUseItem();
                 if (bow.isEmpty()) {
-                    bow = living.getMainHandItem();
+                    bow = user.getMainHandItem();
                     if (bow.isEmpty() || !LootCategory.forItem(bow).isRanged()) {
-                        bow = living.getOffhandItem();
+                        bow = user.getOffhandItem();
                     }
                 }
                 if (bow.isEmpty()) return;
+                SocketHelper.getGems(bow).onArrowFired(user, arrow);
                 AffixHelper.streamAffixes(bow).forEach(a -> {
-                    a.onArrowFired(living, arrow);
+                    a.onArrowFired(user, arrow);
                 });
                 AffixHelper.copyFrom(bow, arrow);
             }
@@ -118,6 +123,8 @@ public class AdventureEvents {
     @SubscribeEvent
     public void impact(ProjectileImpactEvent e) {
         if (e.getProjectile() instanceof AbstractArrow arrow) {
+            SocketHelper.getGemInstances(arrow).forEach(inst -> inst.onArrowImpact(arrow, e.getRayTraceResult()));
+
             var affixes = AffixHelper.getAffixes(arrow);
             affixes.values().forEach(inst -> inst.onArrowImpact(arrow, e.getRayTraceResult(), e.getRayTraceResult().getType()));
         }
@@ -130,6 +137,8 @@ public class AdventureEvents {
         LivingEntity ent = e.getEntity();
         float amount = e.getAmount();
         for (ItemStack s : ent.getAllSlots()) {
+            amount = SocketHelper.getGems(s).onHurt(src, ent, amount);
+
             var affixes = AffixHelper.getAffixes(s);
             for (AffixInstance inst : affixes.values()) {
                 amount = inst.onHurt(src, ent, amount);
@@ -141,13 +150,17 @@ public class AdventureEvents {
     @SubscribeEvent
     public void onItemUse(ItemUseEvent e) {
         ItemStack s = e.getItemStack();
-        AffixHelper.streamAffixes(s).forEach(inst -> {
-            InteractionResult type = inst.onItemUse(e.getContext());
-            if (type != null) {
-                e.setCanceled(true);
-                e.setCancellationResult(type);
-            }
-        });
+        InteractionResult socketRes = SocketHelper.getGems(s).onItemUse(e.getContext());
+        if (socketRes != null) {
+            e.setCanceled(true);
+            e.setCancellationResult(socketRes);
+        }
+
+        InteractionResult afxRes = AffixHelper.streamAffixes(s).map(afx -> afx.onItemUse(e.getContext())).filter(Predicates.notNull()).findFirst().orElse(null);
+        if (afxRes != null) {
+            e.setCanceled(true);
+            e.setCancellationResult(afxRes);
+        }
     }
 
     @SubscribeEvent
@@ -155,6 +168,8 @@ public class AdventureEvents {
         ItemStack stack = e.getEntity().getUseItem();
         var affixes = AffixHelper.getAffixes(stack);
         float blocked = e.getBlockedDamage();
+        blocked = SocketHelper.getGems(stack).onShieldBlock(e.getEntity(), e.getDamageSource(), blocked);
+
         for (AffixInstance inst : affixes.values()) {
             blocked = inst.onShieldBlock(e.getEntity(), e.getDamageSource(), blocked);
         }
@@ -164,6 +179,7 @@ public class AdventureEvents {
     @SubscribeEvent
     public void blockBreak(BreakEvent e) {
         ItemStack stack = e.getPlayer().getMainHandItem();
+        SocketHelper.getGems(stack).onBlockBreak(e.getPlayer(), e.getLevel(), e.getPos(), e.getState());
         AffixHelper.streamAffixes(stack).forEach(inst -> {
             inst.onBlockBreak(e.getPlayer(), e.getLevel(), e.getPos(), e.getState());
         });
@@ -255,6 +271,8 @@ public class AdventureEvents {
     public void enchLevels(GetEnchantmentLevelEvent e) {
         boolean isReentrant = reentrantLock.get().getAndSet(true);
         if (isReentrant) return;
+        SocketHelper.getGems(e.getStack()).getEnchantmentLevels(e.getEnchantments());
+
         AffixHelper.streamAffixes(e.getStack()).forEach(inst -> inst.getEnchantmentLevels(e.getEnchantments()));
         reentrantLock.get().set(false);
     }

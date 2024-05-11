@@ -2,25 +2,16 @@ package dev.shadowsoffire.apotheosis.adventure.affix.socket;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
 
-import dev.shadowsoffire.apotheosis.Apoth.Affixes;
 import dev.shadowsoffire.apotheosis.Apotheosis;
-import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
-import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.Gem;
 import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.GemInstance;
-import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.GemItem;
 import dev.shadowsoffire.apotheosis.adventure.event.GetItemSocketsEvent;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
-import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
-import dev.shadowsoffire.placebo.reload.DynamicHolder;
-import dev.shadowsoffire.placebo.util.CachedObject;
 import dev.shadowsoffire.placebo.util.CachedObject.CachedObjectSource;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -45,68 +36,7 @@ public class SocketHelper {
     public static final String SOCKETS = "sockets";
 
     /**
-     * Gets the list of gems socketed into the item.<br>
-     * Does not validate that the gems are valid in the item.
-     *
-     * @param stack The stack being queried
-     * @return An immutable list of all gems socketed in this item. This list is cached.
-     */
-    public static List<ItemStack> getGems(ItemStack stack) {
-        return CachedObjectSource.getOrCreate(stack, GEMS_CACHED_OBJECT, SocketHelper::getGemsImpl, CachedObject.hashSubkey(AFFIX_DATA));
-    }
-
-    /**
-     * Implementation for {@link #getGems(ItemStack)}
-     */
-    private static List<ItemStack> getGemsImpl(ItemStack stack) {
-        int size = getSockets(stack);
-        if (size <= 0 || stack.isEmpty()) return Collections.emptyList();
-        List<ItemStack> gems = NonNullList.withSize(size, ItemStack.EMPTY);
-        int i = 0;
-        CompoundTag afxData = stack.getTagElement(AffixHelper.AFFIX_DATA);
-        if (afxData != null && afxData.contains(GEMS)) {
-            ListTag gemData = afxData.getList(GEMS, Tag.TAG_COMPOUND);
-            for (Tag tag : gemData) {
-                ItemStack gemStack = ItemStack.of((CompoundTag) tag);
-                gemStack.setCount(1);
-                if (GemInstance.unsocketed(gemStack).isValidUnsocketed()) {
-                    gems.set(i++, gemStack);
-                }
-                if (i >= size) break;
-            }
-        }
-        return ImmutableList.copyOf(gems);
-    }
-
-    /**
-     * Gets a stream of socketed gems that are valid for use in the item.
-     *
-     * @param stack The stack being queried.
-     * @return A stream containing all valid gems in the item.
-     * @see GemInstance#isValid()
-     */
-    public static Stream<GemInstance> getGemInstances(ItemStack stack) {
-        return getGems(stack).stream().map(gemStack -> GemInstance.socketed(stack, gemStack)).filter(GemInstance::isValid);
-    }
-
-    /**
-     * Sets the gem list on the item to the provided list of gems.<br>
-     * Setting more gems than there are sockets will cause the extra gems to be lost.
-     *
-     * @param stack The stack being modified.
-     * @param gems  The list of socketed gems.
-     */
-    public static void setGems(ItemStack stack, List<ItemStack> gems) {
-        CompoundTag afxData = stack.getOrCreateTagElement(AffixHelper.AFFIX_DATA);
-        ListTag gemData = new ListTag();
-        for (ItemStack s : gems) {
-            gemData.add(s.save(new CompoundTag()));
-        }
-        afxData.put(GEMS, gemData);
-    }
-
-    /**
-     * Gets the number of sockets on an item.<br>
+     * Gets the number of sockets on an item.
      * By default, this equals the nbt-encoded socket count, but it may be modified by {@link GetItemSocketsEvent}.
      *
      * @param stack The stack being queried.
@@ -133,13 +63,76 @@ public class SocketHelper {
     }
 
     /**
+     * Gets the list of gems socketed into the item. Gems in the list may be unbound, invalid, or empty.
+     *
+     * @param stack The stack being queried
+     * @return An immutable list of all gems socketed in this item. This list is cached.
+     */
+    public static SocketedGems getGems(ItemStack stack) {
+        return CachedObjectSource.getOrCreate(stack, GEMS_CACHED_OBJECT, SocketHelper::getGemsImpl, SocketHelper::hashSockets);
+    }
+
+    /**
+     * Computes the invalidation hash for the SocketedGems cache. The hash changes if the number of sockets changes, or the affix data changes.
+     */
+    private static int hashSockets(ItemStack stack) {
+        return Objects.hash(stack.getTagElement(AFFIX_DATA), getSockets(stack));
+    }
+
+    /**
+     * Implementation for {@link #getGems(ItemStack)}
+     */
+    private static SocketedGems getGemsImpl(ItemStack stack) {
+        int size = getSockets(stack);
+        if (size <= 0 || stack.isEmpty()) return SocketedGems.EMPTY;
+
+        LootCategory cat = LootCategory.forItem(stack);
+        if (cat.isNone()) return SocketedGems.EMPTY;
+
+        List<GemInstance> gems = NonNullList.withSize(size, GemInstance.EMPTY);
+        int i = 0;
+        CompoundTag afxData = stack.getTagElement(AffixHelper.AFFIX_DATA);
+        if (afxData != null && afxData.contains(GEMS)) {
+
+            ListTag gemData = afxData.getList(GEMS, Tag.TAG_COMPOUND);
+            for (Tag tag : gemData) {
+                ItemStack gemStack = ItemStack.of((CompoundTag) tag);
+                gemStack.setCount(1);
+                GemInstance inst = GemInstance.socketed(stack, gemStack);
+                if (inst.isValid()) {
+                    gems.set(i++, inst);
+                }
+                if (i >= size) break;
+            }
+        }
+
+        return new SocketedGems(ImmutableList.copyOf(gems));
+    }
+
+    /**
+     * Sets the gem list on the item to the provided list of gems.<br>
+     * Setting more gems than there are sockets will cause the extra gems to be lost.
+     *
+     * @param stack The stack being modified.
+     * @param gems  The list of socketed gems.
+     */
+    public static void setGems(ItemStack stack, SocketedGems gems) {
+        CompoundTag afxData = stack.getOrCreateTagElement(AffixHelper.AFFIX_DATA);
+        ListTag gemData = new ListTag();
+        for (GemInstance inst : gems) {
+            gemData.add(inst.gemStack().save(new CompoundTag()));
+        }
+        afxData.put(GEMS, gemData);
+    }
+
+    /**
      * Checks if any of the sockets on the item are empty.
      *
      * @param stack The stack being queried.
      * @return True, if any sockets are empty, otherwise false.
      */
     public static boolean hasEmptySockets(ItemStack stack) {
-        return getGems(stack).stream().map(GemItem::getGem).map(DynamicHolder::getOptional).anyMatch(Optional::isEmpty);
+        return getGems(stack).gems().stream().anyMatch(g -> !g.isValid());
     }
 
     /**
@@ -150,28 +143,11 @@ public class SocketHelper {
      * @see #getGems(ItemStack)
      */
     public static int getFirstEmptySocket(ItemStack stack) {
-        List<ItemStack> gems = getGems(stack);
+        SocketedGems gems = getGems(stack);
         for (int socket = 0; socket < gems.size(); socket++) {
-            DynamicHolder<Gem> gem = GemItem.getGem(gems.get(socket));
-            if (!gem.isBound()) return socket;
+            if (!gems.get(socket).isValid()) return socket;
         }
         return 0;
-    }
-
-    public static void loadSocketAffix(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes) {
-        int sockets = getSockets(stack);
-        if (sockets > 0) {
-            // The rarity is irrelevant for the socket affix, so we always pass the min rarity to the fake affix instance.
-            affixes.put(Affixes.SOCKET, new AffixInstance(stack, RarityRegistry.getMinRarity(), Affixes.SOCKET, sockets, false));
-        }
-    }
-
-    public static void loadSocketAffix(AbstractArrow arrow, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes) {
-        CompoundTag afxData = arrow.getPersistentData().getCompound(AFFIX_DATA);
-        int sockets = afxData != null ? afxData.getInt(SOCKETS) : 0;
-        if (sockets > 0) {
-            affixes.put(Affixes.SOCKET, new AffixInstance(ItemStack.EMPTY, RarityRegistry.getMinRarity(), Affixes.SOCKET, sockets, false));
-        }
     }
 
     /**

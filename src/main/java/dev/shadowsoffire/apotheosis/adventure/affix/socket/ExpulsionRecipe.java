@@ -1,11 +1,10 @@
 package dev.shadowsoffire.apotheosis.adventure.affix.socket;
 
-import java.util.Collections;
-
 import com.google.gson.JsonObject;
 
 import dev.shadowsoffire.apotheosis.adventure.Adventure.Items;
 import dev.shadowsoffire.apotheosis.adventure.AdventureModule.ApothSmithingRecipe;
+import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.GemInstance;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -29,7 +28,7 @@ public class ExpulsionRecipe extends ApothSmithingRecipe {
      */
     @Override
     public boolean matches(Container pInv, Level pLevel) {
-        return pInv.getItem(ADDITION).getItem() == Items.VIAL_OF_EXPULSION.get() && SocketHelper.getGems(pInv.getItem(BASE)).stream().anyMatch(i -> !i.isEmpty());
+        return pInv.getItem(ADDITION).getItem() == Items.VIAL_OF_EXPULSION.get() && SocketHelper.getGems(pInv.getItem(BASE)).stream().anyMatch(GemInstance::isValid);
     }
 
     /**
@@ -39,7 +38,7 @@ public class ExpulsionRecipe extends ApothSmithingRecipe {
     public ItemStack assemble(Container pInv, RegistryAccess regs) {
         ItemStack out = pInv.getItem(BASE).copy();
         if (out.isEmpty()) return ItemStack.EMPTY;
-        SocketHelper.setGems(out, Collections.emptyList());
+        SocketHelper.setGems(out, SocketedGems.EMPTY);
         return out;
     }
 

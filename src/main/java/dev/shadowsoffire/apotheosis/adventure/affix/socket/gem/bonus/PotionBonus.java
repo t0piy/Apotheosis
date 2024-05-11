@@ -115,14 +115,14 @@ public class PotionBonus extends GemBonus {
     }
 
     @Override
-    public void onArrowImpact(ItemStack gemStack, LootRarity rarity, AbstractArrow arrow, HitResult res, HitResult.Type type) {
+    public void onArrowImpact(ItemStack gemStack, LootRarity rarity, AbstractArrow arrow, HitResult res) {
         if (this.target == Target.ARROW_SELF) {
             if (arrow.getOwner() instanceof LivingEntity owner) {
                 this.applyEffect(gemStack, owner, rarity);
             }
         }
         else if (this.target == Target.ARROW_TARGET) {
-            if (type == Type.ENTITY && ((EntityHitResult) res).getEntity() instanceof LivingEntity target) {
+            if (res.getType() == Type.ENTITY && ((EntityHitResult) res).getEntity() instanceof LivingEntity target) {
                 this.applyEffect(gemStack, target, rarity);
             }
         }

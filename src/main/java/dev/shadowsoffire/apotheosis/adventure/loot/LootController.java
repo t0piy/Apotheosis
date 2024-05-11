@@ -62,6 +62,9 @@ public class LootController {
             else rule.execute(stack, rarity, selected, sockets, rand);
         }
 
+        // Prevent number of sockets from decreasing during a Reforge.
+        sockets.setValue(Math.max(sockets.getValue(), SocketHelper.getSockets(stack)));
+
         Map<DynamicHolder<? extends Affix>, AffixInstance> loaded = new HashMap<>();
         List<AffixInstance> nameList = new ArrayList<>(selected.size());
         for (DynamicHolder<Affix> a : selected) {

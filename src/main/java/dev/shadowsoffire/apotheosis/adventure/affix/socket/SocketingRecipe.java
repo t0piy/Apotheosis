@@ -53,16 +53,15 @@ public class SocketingRecipe extends ApothSmithingRecipe {
     public ItemStack assemble(Container inv, RegistryAccess regs) {
         ItemStack input = inv.getItem(BASE);
         ItemStack gemStack = inv.getItem(ADDITION);
-        if (input.isEmpty()) return ItemStack.EMPTY; // This really should throw, but mods being mods, that might be a bad idea.
 
         ItemStack result = input.copy();
         result.setCount(1);
         int socket = SocketHelper.getFirstEmptySocket(result);
-        List<ItemStack> gems = new ArrayList<>(SocketHelper.getGems(result));
+        List<GemInstance> gems = new ArrayList<>(SocketHelper.getGems(result).gems());
         ItemStack gemToInsert = gemStack.copy();
         gemToInsert.setCount(1);
-        gems.set(socket, gemStack.copy());
-        SocketHelper.setGems(result, gems);
+        gems.set(socket, GemInstance.socketed(result, gemStack.copy()));
+        SocketHelper.setGems(result, new SocketedGems(gems));
 
         var event = new ItemSocketingEvent.ModifyResult(input, gemToInsert, result);
         MinecraftForge.EVENT_BUS.post(event);

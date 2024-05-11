@@ -11,7 +11,6 @@ import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingRecipe;
 import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingTableTile;
 import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvagingRecipe;
 import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvagingTableTile;
-import dev.shadowsoffire.apotheosis.adventure.affix.socket.SocketAffix;
 import dev.shadowsoffire.apotheosis.adventure.boss.BossSpawnerBlock.BossSpawnerTile;
 import dev.shadowsoffire.apotheosis.ench.anvil.AnvilTile;
 import dev.shadowsoffire.apotheosis.ench.library.EnchLibraryContainer;
@@ -133,7 +132,6 @@ public class Apoth {
 
     public static final class Affixes {
         // Implicit affixes
-        public static final DynamicHolder<SocketAffix> SOCKET = AffixRegistry.INSTANCE.holder(Apotheosis.loc("socket"));
         public static final DynamicHolder<DurableAffix> DURABLE = AffixRegistry.INSTANCE.holder(Apotheosis.loc("durable"));
         // Real affixes
         public static final DynamicHolder<MagicalArrowAffix> MAGICAL = AffixRegistry.INSTANCE.holder(Apotheosis.loc("ranged/special/magical"));

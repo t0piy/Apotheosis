@@ -168,7 +168,7 @@ public abstract class GemBonus implements CodecProvider<GemBonus> {
     /**
      * Called when an arrow that was marked with this affix hits a target.
      */
-    public void onArrowImpact(ItemStack gemStack, LootRarity rarity, AbstractArrow arrow, HitResult res, HitResult.Type type) {}
+    public void onArrowImpact(ItemStack gemStack, LootRarity rarity, AbstractArrow arrow, HitResult res) {}
 
     /**
      * Called when a shield with this affix blocks some amount of damage.

@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import dev.shadowsoffire.apotheosis.Apotheosis;
-import dev.shadowsoffire.apotheosis.adventure.affix.socket.SocketHelper;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
@@ -89,8 +88,6 @@ public class AffixHelper {
         if (stack.isEmpty()) return Collections.emptyMap();
         Map<DynamicHolder<? extends Affix>, AffixInstance> map = new HashMap<>();
 
-        SocketHelper.loadSocketAffix(stack, map);
-
         CompoundTag afxData = stack.getTagElement(AFFIX_DATA);
         if (afxData != null) {
             // Fallback to legacy path for compatibility. TODO 1.21 - remove
@@ -168,7 +165,6 @@ public class AffixHelper {
     public static Map<DynamicHolder<? extends Affix>, AffixInstance> getAffixes(AbstractArrow arrow) {
         Map<DynamicHolder<? extends Affix>, AffixInstance> map = new HashMap<>();
         CompoundTag afxData = arrow.getPersistentData().getCompound(AFFIX_DATA);
-        SocketHelper.loadSocketAffix(arrow, map);
 
         if (afxData != null && afxData.contains(AFFIXES, Tag.TAG_LIST)) {
             ListTag affixes = afxData.getList(AFFIXES, Tag.TAG_COMPOUND);

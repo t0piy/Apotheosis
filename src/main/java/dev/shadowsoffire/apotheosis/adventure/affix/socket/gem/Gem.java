@@ -140,7 +140,7 @@ public class Gem implements CodecProvider<Gem>, ILuckyWeighted, IDimensional, Ra
      */
     public boolean canApplyTo(ItemStack socketed, ItemStack gem, LootRarity rarity) {
         if (this.isUnique()) {
-            List<Gem> gems = SocketHelper.getGemInstances(socketed).map(GemInstance::gem).map(DynamicHolder::get).toList();
+            List<Gem> gems = SocketHelper.getGems(socketed).streamValidGems().map(GemInstance::gem).map(DynamicHolder::get).toList();
             if (gems.contains(this)) return false;
         }
         return this.isValidIn(socketed, gem, rarity);

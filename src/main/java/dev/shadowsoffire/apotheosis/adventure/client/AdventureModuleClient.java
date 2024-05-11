@@ -32,7 +32,7 @@ import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingScreen;
 import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingTableTileRenderer;
 import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvagingScreen;
 import dev.shadowsoffire.apotheosis.adventure.affix.socket.SocketHelper;
-import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.GemItem;
+import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.GemInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.cutting.GemCuttingScreen;
 import dev.shadowsoffire.apotheosis.adventure.client.BossSpawnMessage.BossSpawnData;
 import dev.shadowsoffire.apotheosis.adventure.client.SocketTooltipRenderer.SocketComponent;
@@ -186,8 +186,8 @@ public class AdventureModuleClient {
     @SubscribeEvent
     public static void ignoreSocketUUIDS(GatherSkippedAttributeTooltipsEvent e) {
         ItemStack stack = e.getStack();
-        for (ItemStack gem : SocketHelper.getGems(stack)) {
-            GemItem.getUUIDs(gem).forEach(e::skipUUID);
+        for (GemInstance gem : SocketHelper.getGems(stack)) {
+            gem.getUUIDs().forEach(e::skipUUID);
         }
     }
 

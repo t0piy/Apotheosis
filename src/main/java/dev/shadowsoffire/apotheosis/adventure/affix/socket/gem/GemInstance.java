@@ -1,7 +1,9 @@
 package dev.shadowsoffire.apotheosis.adventure.affix.socket.gem;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -46,9 +48,11 @@ import net.minecraft.world.phys.HitResult;
  * @param gem      The socketed Gem.
  * @param cate     The LootCategory of the item the Gem is socketed into.
  * @param gemStack The itemstack form of the sockted Gem.
- * @param rarity   The rarity of the Gem. Not the rarity of the item the Gem is socketed into.
+ * @param rarity   The rarity of the Gem.
  */
 public record GemInstance(DynamicHolder<Gem> gem, LootCategory cat, ItemStack gemStack, DynamicHolder<LootRarity> rarity) {
+
+    public static GemInstance EMPTY = new GemInstance(GemRegistry.INSTANCE.emptyHolder(), LootCategory.NONE, ItemStack.EMPTY, RarityRegistry.INSTANCE.emptyHolder());
 
     /**
      * Creates a {@link GemInstance} for a socketed gem.
@@ -134,6 +138,10 @@ public record GemInstance(DynamicHolder<Gem> gem, LootCategory cat, ItemStack ge
         }
     }
 
+    public List<UUID> getUUIDs() {
+        return GemItem.getUUIDs(this.gemStack);
+    }
+
     /**
      * @see GemBonus#getSocketBonusTooltip(ItemStack, LootRarity)
      */
@@ -187,8 +195,8 @@ public record GemInstance(DynamicHolder<Gem> gem, LootCategory cat, ItemStack ge
     /**
      * @see {@link GemBonus#onArrowImpact(AbstractArrow, LootRarity, HitResult, HitResult.Type)}
      */
-    public void onArrowImpact(AbstractArrow arrow, HitResult res, HitResult.Type type) {
-        this.ifPresent(b -> b.onArrowImpact(this.gemStack, this.rarity.get(), arrow, res, type));
+    public void onArrowImpact(AbstractArrow arrow, HitResult res) {
+        this.ifPresent(b -> b.onArrowImpact(this.gemStack, this.rarity.get(), arrow, res));
     }
 
     /**
