@@ -64,7 +64,7 @@ public class ItemStackMixin {
     @ModifyVariable(at = @At(value = "INVOKE", target = "net/minecraft/world/item/ItemStack.getDamageValue()I"), method = "hurt", argsOnly = true, ordinal = 0)
     public int swapDura(int amount, int amountCopy, RandomSource pRandom, @Nullable ServerPlayer pUser) {
         int blocked = 0;
-        DoubleStream socketBonuses = SocketHelper.getGems(((ItemStack) (Object) this)).getDurabilityBonusPercentage(pUser);
+        DoubleStream socketBonuses = SocketHelper.getGems((ItemStack) (Object) this).getDurabilityBonusPercentage(pUser);
         DoubleStream afxBonuses = AffixHelper.streamAffixes((ItemStack) (Object) this).mapToDouble(inst -> inst.getDurabilityBonusPercentage(pUser));
         DoubleStream bonuses = DoubleStream.concat(socketBonuses, afxBonuses);
         double chance = bonuses.reduce(0, (res, ele) -> res + (1 - res) * ele);

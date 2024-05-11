@@ -161,7 +161,7 @@ public class Gem implements CodecProvider<Gem>, ILuckyWeighted, IDimensional, Ra
 
     /**
      * Optionally returns this gem's bonus for the given category/rarity combination.
-     * 
+     *
      * @param cat    The category
      * @param rarity The rarity
      * @return If a bonus exists for the inputs, an {@link Optional} holding it, otherwise {@link Optional#empty()}.

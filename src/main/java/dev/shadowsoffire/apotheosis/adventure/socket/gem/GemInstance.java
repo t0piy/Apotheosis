@@ -243,7 +243,7 @@ public record GemInstance(DynamicHolder<Gem> gem, LootCategory cat, ItemStack ge
 
     /**
      * Resolves a gem bonus using {@link Optional#map(Function)}.
-     * 
+     *
      * @throws UnsupportedOperationException if this instance is not {@link #isValid()}.
      */
     private <T> Optional<T> map(Function<GemBonus, T> function) {
@@ -252,7 +252,7 @@ public record GemInstance(DynamicHolder<Gem> gem, LootCategory cat, ItemStack ge
 
     /**
      * Resolves a gem bonus using {@link Optional#ifPresent(Consumer)}.
-     * 
+     *
      * @throws UnsupportedOperationException if this instance is not {@link #isValid()}.
      */
     private void ifPresent(Consumer<GemBonus> function) {

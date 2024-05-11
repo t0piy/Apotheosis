@@ -128,7 +128,7 @@ public class EnchantmentHelperMixin {
     /**
      * Reverses the loop iteration order in {@link EnchantmentHelper#getTagEnchantmentLevel} to ensure consistency with duplicate enchantments when compared to
      * {@link EnchantmentHelper#getEnchantments}.
-     * 
+     *
      * @param tags  The itemstack's enchantment tags from {@link ItemStack#getEnchantmentTags()}.
      * @param index The current list iteration order, between [0, tags.size())
      * @return The compound tag at the reversed index.

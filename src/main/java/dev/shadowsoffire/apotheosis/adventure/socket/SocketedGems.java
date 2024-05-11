@@ -53,11 +53,11 @@ public record SocketedGems(ImmutableList<GemInstance> gems) implements List<GemI
     }
 
     public int getDamageProtection(DamageSource source) {
-        return streamValidGems().map(inst -> inst.getDamageProtection(source)).reduce(0, Integer::sum);
+        return this.streamValidGems().map(inst -> inst.getDamageProtection(source)).reduce(0, Integer::sum);
     }
 
     public float getDamageBonus(MobType creatureType) {
-        return streamValidGems().map(inst -> inst.getDamageBonus(creatureType)).reduce(Float::sum).orElse(0F);
+        return this.streamValidGems().map(inst -> inst.getDamageBonus(creatureType)).reduce(Float::sum).orElse(0F);
     }
 
     public void doPostAttack(LivingEntity user, Entity target) {
@@ -83,7 +83,7 @@ public record SocketedGems(ImmutableList<GemInstance> gems) implements List<GemI
     }
 
     public float onShieldBlock(LivingEntity entity, DamageSource source, float amount) {
-        for (GemInstance inst : gems) {
+        for (GemInstance inst : this.gems) {
             if (inst.isValid()) {
                 amount = inst.onShieldBlock(entity, source, amount);
             }
@@ -100,7 +100,7 @@ public record SocketedGems(ImmutableList<GemInstance> gems) implements List<GemI
     }
 
     public float onHurt(DamageSource src, LivingEntity ent, float amount) {
-        for (GemInstance inst : gems) {
+        for (GemInstance inst : this.gems) {
             if (inst.isValid()) {
                 amount = inst.onHurt(src, ent, amount);
             }

@@ -216,7 +216,7 @@ public class RadialAffix extends Affix {
          * Returns the current radial break state for the given player.
          * <p>
          * The state defaults to {@link #REQUIRE_NOT_SNEAKING} if no state is set.
-         * 
+         *
          * @param player The player
          * @return The current radial state, or {@link #REQUIRE_NOT_SNEAKING} if a parse error occurred.
          */

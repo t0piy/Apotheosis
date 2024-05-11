@@ -221,7 +221,7 @@ public class AffixHelper {
 
     /**
      * Helper method to add vanilla lore text to an item stack.
-     * 
+     *
      * @param stack The stack to add text to
      * @param lore  The text component to add
      */
