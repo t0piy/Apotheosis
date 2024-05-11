@@ -5,8 +5,8 @@ import org.joml.Matrix4f;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.shadowsoffire.apotheosis.Apotheosis;
-import dev.shadowsoffire.apotheosis.adventure.affix.socket.SocketedGems;
-import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.GemInstance;
+import dev.shadowsoffire.apotheosis.adventure.socket.SocketedGems;
+import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
