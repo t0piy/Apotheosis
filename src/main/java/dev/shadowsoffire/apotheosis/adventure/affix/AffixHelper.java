@@ -19,7 +19,6 @@ import dev.shadowsoffire.placebo.util.StepFunction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +29,9 @@ import net.minecraft.world.item.ItemStack;
 public class AffixHelper {
 
     public static final ResourceLocation AFFIX_CACHED_OBJECT = Apotheosis.loc("affixes");
+
+    public static final String DISPLAY = "display";
+    public static final String LORE = "Lore";
 
     public static final String AFFIX_DATA = "affix_data";
     public static final String AFFIXES = "affixes";
@@ -50,11 +52,11 @@ public class AffixHelper {
 
     public static void setAffixes(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes) {
         CompoundTag afxData = stack.getOrCreateTagElement(AFFIX_DATA);
-        ListTag afxTag = new ListTag();
+        CompoundTag affixesTag = new CompoundTag();
         for (AffixInstance inst : affixes.values()) {
-            afxTag.add(inst.save());
+            affixesTag.putFloat(inst.affix().getId().toString(), inst.level());
         }
-        afxData.put(AFFIXES, afxTag);
+        afxData.put(AFFIXES, affixesTag);
     }
 
     public static void setName(ItemStack stack, Component name) {
@@ -87,32 +89,8 @@ public class AffixHelper {
     public static Map<DynamicHolder<? extends Affix>, AffixInstance> getAffixesImpl(ItemStack stack) {
         if (stack.isEmpty()) return Collections.emptyMap();
         Map<DynamicHolder<? extends Affix>, AffixInstance> map = new HashMap<>();
-
         CompoundTag afxData = stack.getTagElement(AFFIX_DATA);
-        if (afxData != null) {
-            // Fallback to legacy path for compatibility. TODO 1.21 - remove
-            if (afxData.contains(AFFIXES, Tag.TAG_COMPOUND)) {
-                return getAffixesImplV1(stack, afxData);
-            }
-            else if (afxData.contains(AFFIXES, Tag.TAG_LIST)) {
-                ListTag affixes = afxData.getList(AFFIXES, Tag.TAG_COMPOUND);
-                DynamicHolder<LootRarity> rarity = getRarity(afxData);
-                if (!rarity.isBound()) rarity = RarityRegistry.getMinRarity();
-
-                for (Tag t : affixes) {
-                    AffixInstance inst = AffixInstance.load(stack, rarity, (CompoundTag) t);
-                    if (inst.isValid()) {
-                        map.put(inst.affix(), inst);
-                    }
-                }
-            }
-        }
-        return Collections.unmodifiableMap(map);
-    }
-
-    private static Map<DynamicHolder<? extends Affix>, AffixInstance> getAffixesImplV1(ItemStack stack, CompoundTag afxData) {
         if (afxData != null && afxData.contains(AFFIXES)) {
-            Map<DynamicHolder<? extends Affix>, AffixInstance> map = new HashMap<>();
             CompoundTag affixes = afxData.getCompound(AFFIXES);
             DynamicHolder<LootRarity> rarity = getRarity(afxData);
             if (!rarity.isBound()) rarity = RarityRegistry.getMinRarity();
@@ -121,11 +99,10 @@ public class AffixHelper {
                 DynamicHolder<Affix> affix = AffixRegistry.INSTANCE.holder(new ResourceLocation(key));
                 if (!affix.isBound() || !affix.get().canApplyTo(stack, cat, rarity.get())) continue;
                 float lvl = affixes.getFloat(key);
-                map.put(affix, new AffixInstance(stack, rarity, affix, lvl, false));
+                map.put(affix, new AffixInstance(affix, stack, rarity, lvl));
             }
-            return map;
         }
-        return Collections.emptyMap();
+        return Collections.unmodifiableMap(map);
     }
 
     public static Stream<AffixInstance> streamAffixes(ItemStack stack) {
@@ -166,19 +143,17 @@ public class AffixHelper {
         Map<DynamicHolder<? extends Affix>, AffixInstance> map = new HashMap<>();
         CompoundTag afxData = arrow.getPersistentData().getCompound(AFFIX_DATA);
 
-        if (afxData != null && afxData.contains(AFFIXES, Tag.TAG_LIST)) {
-            ListTag affixes = afxData.getList(AFFIXES, Tag.TAG_COMPOUND);
+        if (afxData != null && afxData.contains(AFFIXES)) {
+            CompoundTag affixes = afxData.getCompound(AFFIXES);
             DynamicHolder<LootRarity> rarity = getRarity(afxData);
             if (!rarity.isBound()) rarity = RarityRegistry.getMinRarity();
-
-            for (Tag t : affixes) {
-                AffixInstance inst = AffixInstance.load(ItemStack.EMPTY, rarity, (CompoundTag) t);
-                if (inst.isValid()) {
-                    map.put(inst.affix(), inst);
-                }
+            for (String key : affixes.getAllKeys()) {
+                DynamicHolder<Affix> affix = AffixRegistry.INSTANCE.holder(new ResourceLocation(key));
+                if (!affix.isBound()) continue;
+                float lvl = affixes.getFloat(key);
+                map.put(affix, new AffixInstance(affix, ItemStack.EMPTY, rarity, lvl));
             }
         }
-
         return map;
     }
 
