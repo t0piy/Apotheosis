@@ -11,10 +11,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.shadowsoffire.apotheosis.Apotheosis;
 import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvagingRecipe.OutputData;
+import dev.shadowsoffire.apotheosis.adventure.client.AdventureContainerScreen;
 import dev.shadowsoffire.apotheosis.adventure.client.GrayBufferSource;
 import dev.shadowsoffire.apotheosis.adventure.client.SimpleTexButton;
-import dev.shadowsoffire.apotheosis.util.DrawsOnLeft;
-import dev.shadowsoffire.placebo.screen.PlaceboContainerScreen;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.ChatFormatting;
@@ -32,7 +31,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-public class SalvagingScreen extends PlaceboContainerScreen<SalvagingMenu> implements DrawsOnLeft {
+public class SalvagingScreen extends AdventureContainerScreen<SalvagingMenu> {
 
     public static final Component TITLE = Component.translatable("container.apotheosis.salvage");
     public static final ResourceLocation TEXTURE = new ResourceLocation(Apotheosis.MODID, "textures/gui/salvage.png");
@@ -185,17 +184,6 @@ public class SalvagingScreen extends PlaceboContainerScreen<SalvagingMenu> imple
         stack.popPose();
 
         super.renderTooltip(gfx, x, y);
-    }
-
-    @Override
-    protected void renderLabels(GuiGraphics gfx, int mouseX, int mouseY) {
-        // gfx.drawString(this.font, Component.translatable("text.apotheosis.results"), 133, this.titleLabelY, 4210752, false);
-        // super.renderLabels(gfx, mouseX, mouseY);
-    }
-
-    @Override
-    public int getSlotColor(int index) {
-        return 0x40FFFFFF;
     }
 
 }

@@ -53,10 +53,10 @@ public class GemCuttingMenu extends PlaceboContainerMenu {
         super(Menus.GEM_CUTTING.get(), id, playerInv);
         this.player = playerInv.player;
         this.access = access;
-        this.addSlot(new UpdatingSlot(this.inv, 0, 53, 25, stack -> GemItem.getGem(stack).isBound()));
-        this.addSlot(new UpdatingSlot(this.inv, 1, 12, 25, stack -> stack.getItem() == Items.GEM_DUST.get()));
-        this.addSlot(new UpdatingSlot(this.inv, 2, 53, 68, this::matchesMainGem));
-        this.addSlot(new UpdatingSlot(this.inv, 3, 94, 25, this::isValidMaterial));
+        this.addSlot(new UpdatingSlot(this.inv, 0, 62, 45, stack -> GemItem.getGem(stack).isBound()));
+        this.addSlot(new UpdatingSlot(this.inv, 1, 90, 64, stack -> stack.getItem() == Items.GEM_DUST.get()));
+        this.addSlot(new UpdatingSlot(this.inv, 2, 33, 64, this::matchesMainGem));
+        this.addSlot(new UpdatingSlot(this.inv, 3, 62, 12, this::isValidMaterial));
 
         this.addPlayerSlots(playerInv, 8, 98);
         this.mover.registerRule((stack, slot) -> slot >= this.playerInvStart && this.inv.getStackInSlot(0).isEmpty() && GemCuttingMenu.isValidMainGem(stack), 0, 1);

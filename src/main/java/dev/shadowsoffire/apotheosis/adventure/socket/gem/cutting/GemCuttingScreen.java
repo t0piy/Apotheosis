@@ -7,16 +7,15 @@ import dev.shadowsoffire.apotheosis.Apotheosis;
 import dev.shadowsoffire.apotheosis.adventure.Adventure;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvagingScreen;
+import dev.shadowsoffire.apotheosis.adventure.client.AdventureContainerScreen;
 import dev.shadowsoffire.apotheosis.adventure.client.GrayBufferSource;
 import dev.shadowsoffire.apotheosis.adventure.client.SimpleTexButton;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.cutting.GemCuttingMenu.GemCuttingRecipe;
-import dev.shadowsoffire.apotheosis.util.DrawsOnLeft;
 import dev.shadowsoffire.attributeslib.api.AttributeHelper;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
-import dev.shadowsoffire.placebo.screen.PlaceboContainerScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -34,7 +33,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-public class GemCuttingScreen extends PlaceboContainerScreen<GemCuttingMenu> implements DrawsOnLeft {
+public class GemCuttingScreen extends AdventureContainerScreen<GemCuttingMenu> {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(Apotheosis.MODID, "textures/gui/gem_cutting.png");
 
@@ -58,7 +57,7 @@ public class GemCuttingScreen extends PlaceboContainerScreen<GemCuttingMenu> imp
         int top = this.getGuiTop();
 
         this.upgradeBtn = this.addRenderableWidget(
-            new SimpleTexButton(left + 125, top + 30, 40, 40, 216, 0, TEXTURE, 256, 256,
+            new SimpleTexButton(left + 135, top + 44, 18, 18, 238, 0, TEXTURE, 256, 256,
                 this::clickUpgradeBtn,
                 Component.translatable("button.apotheosis.upgrade"))
                 .setInactiveMessage(Component.translatable("button.apotheosis.upgrade.no").withStyle(ChatFormatting.RED)));

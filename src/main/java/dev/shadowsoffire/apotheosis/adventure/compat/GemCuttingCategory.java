@@ -59,11 +59,13 @@ public class GemCuttingCategory implements IRecipeCategory<GemCuttingRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, GemCuttingRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 46, 14).addIngredient(VanillaTypes.ITEM_STACK, recipe.gem);
-        builder.addSlot(RecipeIngredientRole.INPUT, 5, 14).addIngredient(VanillaTypes.ITEM_STACK, recipe.dust);
-        builder.addSlot(RecipeIngredientRole.INPUT, 46, 57).addIngredient(VanillaTypes.ITEM_STACK, recipe.gem);
-        builder.addSlot(RecipeIngredientRole.INPUT, 87, 14).addIngredients(VanillaTypes.ITEM_STACK, Arrays.asList(recipe.materials));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 129, 14).addIngredient(VanillaTypes.ITEM_STACK, recipe.out);
+        builder.addSlot(RecipeIngredientRole.INPUT, 48, 37).addIngredient(VanillaTypes.ITEM_STACK, recipe.gem);
+
+        builder.addSlot(RecipeIngredientRole.INPUT, 48, 4).addIngredients(VanillaTypes.ITEM_STACK, Arrays.asList(recipe.materials));
+        builder.addSlot(RecipeIngredientRole.INPUT, 19, 56).addIngredient(VanillaTypes.ITEM_STACK, recipe.gem);
+        builder.addSlot(RecipeIngredientRole.INPUT, 76, 56).addIngredient(VanillaTypes.ITEM_STACK, recipe.dust);
+
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 117, 35).addIngredient(VanillaTypes.ITEM_STACK, recipe.out);
     }
 
     public static class GemCuttingRecipe {
