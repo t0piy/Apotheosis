@@ -43,9 +43,7 @@ public class SalvagingScreen extends PlaceboContainerScreen<SalvagingMenu> imple
     public SalvagingScreen(SalvagingMenu menu, Inventory inv, Component title) {
         super(menu, inv, TITLE);
         this.menu.addSlotListener((id, stack) -> this.computeResults());
-        this.titleLabelX--;
-        this.inventoryLabelX--;
-        this.inventoryLabelY++;
+        this.imageHeight = 174;
     }
 
     @Override
@@ -55,7 +53,7 @@ public class SalvagingScreen extends PlaceboContainerScreen<SalvagingMenu> imple
         int top = this.getGuiTop();
 
         this.salvageBtn = this.addRenderableWidget(
-            new SimpleTexButton(left + 105, top + 33, 20, 20, 196, 0, TEXTURE, 256, 256,
+            new SimpleTexButton(left + 98, top + 34, 18, 18, 238, 0, TEXTURE, 256, 256,
                 btn -> this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 0),
                 Component.translatable("button.apotheosis.salvage"))
                 .setInactiveMessage(Component.translatable("button.apotheosis.no_salvage").withStyle(ChatFormatting.RED)));
@@ -104,8 +102,6 @@ public class SalvagingScreen extends PlaceboContainerScreen<SalvagingMenu> imple
     public void render(GuiGraphics gfx, int pMouseX, int pMouseY, float pPartialTick) {
         this.renderBackground(gfx);
         super.render(gfx, pMouseX, pMouseY, pPartialTick);
-        int left = this.getGuiLeft();
-        int top = this.getGuiTop();
 
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         RenderSystem.enableBlend();
@@ -118,9 +114,9 @@ public class SalvagingScreen extends PlaceboContainerScreen<SalvagingMenu> imple
             // Search for an empty slot to draw the ghost item on.
             // Skip drawing the item if it already exists in the output inventory.
             int displaySlot = -1;
-            for (int slot = 0; slot < 6; slot++) {
+            for (int slot = 12; slot < 18; slot++) {
                 if (skipSlots.contains(slot)) continue;
-                ItemStack outStack = this.menu.slots.get(15 + slot).getItem();
+                ItemStack outStack = this.menu.slots.get(slot).getItem();
                 if (outStack.isEmpty()) {
                     displaySlot = slot;
                     skipSlots.add(slot);
@@ -131,7 +127,8 @@ public class SalvagingScreen extends PlaceboContainerScreen<SalvagingMenu> imple
                 }
             }
             if (displaySlot == -1) continue;
-            renderGuiItem(gfx, display, left + 134 + displaySlot % 2 * 18, top + 17 + displaySlot / 2 * 18, GrayBufferSource::new);
+            Slot slot = this.menu.getSlot(displaySlot);
+            renderGuiItem(gfx, display, this.getGuiLeft() + slot.x, this.getGuiTop() + slot.y, GrayBufferSource::new);
         }
 
         this.renderTooltip(gfx, pMouseX, pMouseY);
@@ -192,8 +189,13 @@ public class SalvagingScreen extends PlaceboContainerScreen<SalvagingMenu> imple
 
     @Override
     protected void renderLabels(GuiGraphics gfx, int mouseX, int mouseY) {
-        gfx.drawString(this.font, Component.translatable("text.apotheosis.results"), 133, this.titleLabelY, 4210752, false);
-        super.renderLabels(gfx, mouseX, mouseY);
+        // gfx.drawString(this.font, Component.translatable("text.apotheosis.results"), 133, this.titleLabelY, 4210752, false);
+        // super.renderLabels(gfx, mouseX, mouseY);
+    }
+
+    @Override
+    public int getSlotColor(int index) {
+        return 0x40FFFFFF;
     }
 
 }
