@@ -6,6 +6,7 @@ import java.util.List;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.shadowsoffire.apotheosis.Apotheosis;
+import dev.shadowsoffire.apotheosis.adventure.Adventure;
 import dev.shadowsoffire.apotheosis.adventure.Adventure.Items;
 import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingMenu.ReforgingResultSlot;
 import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvagingScreen;
@@ -13,6 +14,7 @@ import dev.shadowsoffire.apotheosis.adventure.client.AdventureContainerScreen;
 import dev.shadowsoffire.apotheosis.adventure.client.GhostVertexBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,11 +30,13 @@ public class ReforgingScreen extends AdventureContainerScreen<ReforgingMenu> {
      */
     public static final ResourceLocation TEXTURE = new ResourceLocation(Apotheosis.MODID, "textures/gui/reforge.png");
     public static final ResourceLocation ANIMATED_TEXTURE = new ResourceLocation(Apotheosis.MODID, "textures/gui/reforge_animation.png");
+    public static final int MAX_ANIMATION_TIME = 8;
 
     protected boolean hasMainItem = false;
     protected int animationTick = 0;
     protected int maxSlot = -1;
 
+    protected int opacityTick = 0;
     protected int availableOpacity = 0xAA;
 
     public ReforgingScreen(ReforgingMenu menu, Inventory inv, Component title) {
@@ -100,18 +104,34 @@ public class ReforgingScreen extends AdventureContainerScreen<ReforgingMenu> {
         boolean hadItem = this.hasMainItem;
         this.hasMainItem = this.menu.getSlot(0).hasItem();
 
-        final int FRAME_TIME = 20;
-
         if (!hadItem && hasMainItem) {
-            this.animationTick = FRAME_TIME;
+            this.animationTick = MAX_ANIMATION_TIME;
+            this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(Adventure.Sounds.REFORGE.get(), 1F, 2F));
         }
 
         if (this.hasMainItem) {
-            // 127x112 12 frames at 24fps
-            // pos 26,15
-            float delta = Mth.clamp((FRAME_TIME - this.animationTick - partials) / FRAME_TIME, 0, 1);
+            float delta = Mth.clamp((MAX_ANIMATION_TIME - this.animationTick - partials) / MAX_ANIMATION_TIME, 0, 1);
             int frame = Mth.lerpInt(delta, 0, 20);
             gfx.blit(ANIMATED_TEXTURE, left + 26, top + 15, 127, 112, 0, frame * 112, 127, 112, 127, 2240);
+        }
+
+        int dust = this.menu.getDustCount();
+        int mats = this.menu.getMatCount();
+        int levels = this.menu.player.experienceLevel;
+
+        this.maxSlot = -1;
+
+        for (int idx = 0; idx < 3; idx++) {
+            Slot slot = this.getMenu().getSlot(3 + idx);
+            if (!slot.hasItem()) break;
+
+            int dustCost = this.menu.getDustCost(idx);
+            int matCost = this.menu.getMatCost(idx);
+            int levelCost = this.menu.getLevelCost(idx);
+
+            if ((dust >= dustCost && levels >= levelCost && mats >= matCost) || this.minecraft.player.getAbilities().instabuild) {
+                this.maxSlot++;
+            }
         }
     }
 
@@ -151,33 +171,18 @@ public class ReforgingScreen extends AdventureContainerScreen<ReforgingMenu> {
 
     @Override
     protected void containerTick() {
-        int dust = this.menu.getDustCount();
-        int mats = this.menu.getMatCount();
-        int levels = this.menu.player.experienceLevel;
-
-        this.maxSlot = -1;
-
-        for (int idx = 0; idx < 3; idx++) {
-            Slot slot = this.getMenu().getSlot(3 + idx);
-            if (!slot.hasItem()) break;
-
-            int dustCost = this.menu.getDustCost(idx);
-            int matCost = this.menu.getMatCost(idx);
-            int levelCost = this.menu.getLevelCost(idx);
-
-            if ((dust >= dustCost && levels >= levelCost && mats >= matCost) || this.minecraft.player.getAbilities().instabuild) {
-                this.maxSlot++;
-            }
-        }
-
-        int ticks = this.minecraft.player.tickCount % 60;
-        float sin = Mth.sin((ticks / 60F) * Mth.PI);
-        float delta = sin * sin;
-        this.availableOpacity = Mth.lerpInt(delta, 0x88, 0xDD);
+        this.opacityTick++;
 
         if (this.animationTick > 0) {
             this.animationTick--;
+            if (this.animationTick == 0) {
+                this.opacityTick = 0;
+            }
         }
+
+        float sin = Mth.sin((this.opacityTick / 60F) * Mth.PI);
+        float delta = sin * sin;
+        this.availableOpacity = Mth.lerpInt(delta, 0x88, 0xDD);
     }
 
     @Override

@@ -22,6 +22,7 @@ import dev.shadowsoffire.placebo.menu.MenuUtil;
 import dev.shadowsoffire.placebo.registry.DeferredHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -139,12 +140,20 @@ public class Adventure {
         private static void bootstrap() {}
     }
 
+    public static class Sounds {
+
+        public static final RegistryObject<SoundEvent> REFORGE = R.sound("reforge");
+
+        private static void bootstrap() {}
+    }
+
     public static void bootstrap() {
         Blocks.bootstrap();
         Items.bootstrap();
         Features.bootstrap();
         Menus.bootstrap();
         Tabs.bootstrap();
+        Sounds.bootstrap();
     }
 
 }
