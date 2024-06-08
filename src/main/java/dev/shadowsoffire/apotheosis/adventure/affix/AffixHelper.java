@@ -73,7 +73,7 @@ public class AffixHelper {
     }
 
     /**
-     * Gets the affixes of an item. Changes to this map will not write-back to the affixes on the itemstack.
+     * Gets the affixes of an item. The returned map is immutable.
      * <p>
      * Due to potential reloads, it is possible for an affix instance to become unbound but still remain cached.
      *

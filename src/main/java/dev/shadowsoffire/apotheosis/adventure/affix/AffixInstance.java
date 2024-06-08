@@ -63,10 +63,10 @@ public record AffixInstance(DynamicHolder<? extends Affix> affix, ItemStack stac
     }
 
     /**
-     * @see Affix#getName(ItemStack, LootRarity, float, boolean)
+     * @see Affix#getName(boolean)
      */
     public Component getName(boolean prefix) {
-        return this.afx().getName(this.stack, this.rty(), this.level, prefix);
+        return this.afx().getName(prefix);
     }
 
     /**

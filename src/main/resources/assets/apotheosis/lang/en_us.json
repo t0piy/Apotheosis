@@ -287,10 +287,8 @@
     "affix.apotheosis:armor/mob_effect/bursting": "Bursting",
     "affix.apotheosis:armor/mob_effect/bursting.suffix": "of Vitality",
 
-    "affix.apotheosis:socket": "",
-    "affix.apotheosis:socket.suffix": "",
-    "affix.apotheosis:durable": "",
-    "affix.apotheosis:durable.suffix": "",
+    "affix.apotheosis:durable": "Durable",
+    "affix.apotheosis:durable.suffix": "of Durability",
 
     "affix.apotheosis.target.attack_self": "On hit, gain %s",
     "affix.apotheosis.target.attack_target": "On hit, inflict %s",

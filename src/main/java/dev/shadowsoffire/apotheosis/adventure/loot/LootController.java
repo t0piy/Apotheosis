@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -54,7 +55,7 @@ public class LootController {
      * @return The modifed ItemStack (note the original is not preserved, but the stack is returned for simplicity).
      */
     public static ItemStack createLootItem(ItemStack stack, LootCategory cat, LootRarity rarity, RandomSource rand) {
-        Set<DynamicHolder<Affix>> selected = new LinkedHashSet<>();
+        Set<DynamicHolder<? extends Affix>> selected = new LinkedHashSet<>();
         MutableInt sockets = new MutableInt(0);
         float durability = 0;
         for (LootRule rule : rarity.getRules()) {
@@ -67,7 +68,7 @@ public class LootController {
 
         Map<DynamicHolder<? extends Affix>, AffixInstance> loaded = new HashMap<>();
         List<AffixInstance> nameList = new ArrayList<>(selected.size());
-        for (DynamicHolder<Affix> a : selected) {
+        for (DynamicHolder<? extends Affix> a : selected) {
             AffixInstance inst = new AffixInstance(a, stack, RarityRegistry.INSTANCE.holder(rarity), rand.nextFloat());
             loaded.put(a, inst);
             nameList.add(inst);
@@ -111,6 +112,26 @@ public class LootController {
         if (entry == null) return ItemStack.EMPTY;
         if (rarity == null) rarity = LootRarity.random(rand, player.getLuck(), entry);
         return createLootItem(entry.getStack(), entry.getType(), rarity, rand);
+    }
+
+    /**
+     * Returns the pool of available affixes for an item, given the existing affixes present.
+     * 
+     * @param stack          The item stack the affixes may be applied to
+     * @param rarity         The rarity of the item stack
+     * @param currentAffixes The current affixes that are (or will be) applied to the item.
+     * @param type           The type of affix to target
+     * @return A list of available affixes for the item. May be empty.
+     */
+    public static List<DynamicHolder<? extends Affix>> getAvailableAffixes(ItemStack stack, LootRarity rarity, Set<DynamicHolder<? extends Affix>> currentAffixes, AffixType type) {
+        LootCategory cat = LootCategory.forItem(stack);
+        List<DynamicHolder<? extends Affix>> available = AffixHelper.byType(type)
+            .stream()
+            .filter(a -> a.get().canApplyTo(stack, cat, rarity))
+            .filter(a -> !currentAffixes.contains(a))
+            .collect(Collectors.toList());
+
+        return available;
     }
 
 }

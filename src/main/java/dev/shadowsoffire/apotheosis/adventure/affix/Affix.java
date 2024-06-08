@@ -80,7 +80,7 @@ public abstract class Affix implements CodecProvider<Affix> {
      *
      * @return The name part, prefix or suffix, as requested.
      */
-    public Component getName(ItemStack stack, LootRarity rarity, float level, boolean prefix) {
+    public Component getName(boolean prefix) {
         if (prefix) return Component.translatable("affix." + this.getId());
         return Component.translatable("affix." + this.getId() + ".suffix");
     }
