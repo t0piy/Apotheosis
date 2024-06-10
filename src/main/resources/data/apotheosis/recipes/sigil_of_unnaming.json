@@ -6,26 +6,20 @@
   }],
   "group": "something",
   "pattern": [
-    "GDG",
     "SSS",
-    "GAG"
+    "GGG",
+    "SSS"
   ],
   "key": {
-    "D": {
-      "item": "minecraft:dragon_breath"
-    },
 	"G": {
-      "item": "apotheosis:gem_dust"
+      "item": "minecraft:flint"
     },
 	"S": {
       "item": "apotheosis:gem_fused_slate"
-    },
-	"A": {
-      "item": "minecraft:amethyst_shard"
     }
   },
   "result": {
-    "item": "apotheosis:sigil_of_socketing",
-    "count": 3
+    "item": "apotheosis:sigil_of_unnaming",
+    "count": 6
   }
 }

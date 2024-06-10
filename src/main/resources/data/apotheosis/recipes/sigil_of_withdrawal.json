@@ -6,13 +6,13 @@
   }],
   "group": "something",
   "pattern": [
-    "GDG",
-    "SSS",
-    "GAG"
+    "SBS",
+    "ELE",
+    "SGS"
   ],
   "key": {
-    "D": {
-      "item": "minecraft:dragon_breath"
+    "B": {
+      "item": "minecraft:blaze_rod"
     },
 	"G": {
       "item": "apotheosis:gem_dust"
@@ -20,12 +20,15 @@
 	"S": {
       "item": "apotheosis:gem_fused_slate"
     },
-	"A": {
-      "item": "minecraft:amethyst_shard"
+	"E": {
+      "item": "minecraft:ender_pearl"
+    },
+	"L": {
+      "item": "minecraft:lava_bucket"
     }
   },
   "result": {
-    "item": "apotheosis:sigil_of_socketing",
-    "count": 3
+    "item": "apotheosis:sigil_of_withdrawal",
+    "count": 4
   }
 }

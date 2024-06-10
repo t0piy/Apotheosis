@@ -40,10 +40,9 @@ import dev.shadowsoffire.apotheosis.adventure.loot.GemLootPoolEntry;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.apotheosis.adventure.socket.AddSocketsRecipe;
-import dev.shadowsoffire.apotheosis.adventure.socket.ExpulsionRecipe;
-import dev.shadowsoffire.apotheosis.adventure.socket.ExtractionRecipe;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketingRecipe;
 import dev.shadowsoffire.apotheosis.adventure.socket.UnnamingRecipe;
+import dev.shadowsoffire.apotheosis.adventure.socket.WithdrawalRecipe;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemRegistry;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.apotheosis.adventure.spawner.RogueSpawnerRegistry;
@@ -110,8 +109,7 @@ public class AdventureModule {
         MinibossRegistry.INSTANCE.registerToBus();
         Apotheosis.HELPER.registerProvider(f -> {
             f.addRecipe(new SocketingRecipe());
-            f.addRecipe(new ExpulsionRecipe());
-            f.addRecipe(new ExtractionRecipe());
+            f.addRecipe(new WithdrawalRecipe());
             f.addRecipe(new UnnamingRecipe());
         });
         e.enqueueWork(() -> {
@@ -129,8 +127,8 @@ public class AdventureModule {
             CraftingHelper.register(Apotheosis.loc("affix_item"), AffixItemIngredient.Serializer.INSTANCE);
             CraftingHelper.register(Apotheosis.loc("gem"), GemIngredient.Serializer.INSTANCE);
 
-            TabFillingRegistry.register(Adventure.Tabs.ADVENTURE.getKey(), Items.COMMON_MATERIAL, Items.UNCOMMON_MATERIAL, Items.RARE_MATERIAL, Items.EPIC_MATERIAL, Items.MYTHIC_MATERIAL, Items.GEM_DUST, Items.VIAL_OF_EXPULSION,
-                Items.VIAL_OF_EXTRACTION, Items.VIAL_OF_UNNAMING, Items.SIGIL_OF_SOCKETING, Items.SIGIL_OF_ENHANCEMENT, Items.SUPERIOR_SIGIL_OF_SOCKETING, Items.SUPERIOR_SIGIL_OF_ENHANCEMENT, Items.BOSS_SUMMONER,
+            TabFillingRegistry.register(Adventure.Tabs.ADVENTURE.getKey(), Items.COMMON_MATERIAL, Items.UNCOMMON_MATERIAL, Items.RARE_MATERIAL, Items.EPIC_MATERIAL, Items.MYTHIC_MATERIAL, Items.GEM_DUST,
+                Items.GEM_FUSED_SLATE, Items.SIGIL_OF_SOCKETING, Items.SIGIL_OF_WITHDRAWAL, Items.SIGIL_OF_REBIRTH, Items.SIGIL_OF_ENHANCEMENT, Items.SIGIL_OF_UNNAMING, Items.BOSS_SUMMONER,
                 Items.SIMPLE_REFORGING_TABLE, Items.REFORGING_TABLE, Items.SALVAGING_TABLE, Items.GEM_CUTTING_TABLE);
             TabFillingRegistry.register(Adventure.Tabs.ADVENTURE.getKey(), Items.GEM);
         });
@@ -146,8 +144,7 @@ public class AdventureModule {
     @SubscribeEvent
     public void serializers(Register<RecipeSerializer<?>> e) {
         e.getRegistry().register(SocketingRecipe.Serializer.INSTANCE, "socketing");
-        e.getRegistry().register(ExpulsionRecipe.Serializer.INSTANCE, "expulsion");
-        e.getRegistry().register(ExtractionRecipe.Serializer.INSTANCE, "extraction");
+        e.getRegistry().register(WithdrawalRecipe.Serializer.INSTANCE, "widthdrawal");
         e.getRegistry().register(UnnamingRecipe.Serializer.INSTANCE, "unnaming");
         e.getRegistry().register(AddSocketsRecipe.Serializer.INSTANCE, "add_sockets");
         e.getRegistry().register(SalvagingRecipe.Serializer.INSTANCE, "salvaging");

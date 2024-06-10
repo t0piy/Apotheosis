@@ -54,7 +54,7 @@ public class ReforgingMenu extends BlockEntityMenu<ReforgingTableTile> {
             }
         });
         this.addSlot(new UpdatingSlot(this.tile.inv, 0, 39, 40, this.tile::isValidRarityMat));
-        this.addSlot(new UpdatingSlot(this.tile.inv, 1, 123, 86, stack -> stack.getItem() == Items.GEM_DUST.get()));
+        this.addSlot(new UpdatingSlot(this.tile.inv, 1, 123, 86, stack -> stack.getItem() == Items.SIGIL_OF_REBIRTH.get()));
         this.addSlot(new ReforgingResultSlot(this.choicesInv, 0, 27, 135));
         this.addSlot(new ReforgingResultSlot(this.choicesInv, 1, 81, 135));
         this.addSlot(new ReforgingResultSlot(this.choicesInv, 2, 135, 135));
@@ -62,7 +62,7 @@ public class ReforgingMenu extends BlockEntityMenu<ReforgingTableTile> {
 
         this.mover.registerRule((stack, slot) -> slot >= this.playerInvStart && !LootCategory.forItem(stack).isNone(), 0, 1);
         this.mover.registerRule((stack, slot) -> slot >= this.playerInvStart && this.tile.isValidRarityMat(stack), 1, 2);
-        this.mover.registerRule((stack, slot) -> slot >= this.playerInvStart && stack.getItem() == Items.GEM_DUST.get(), 2, 3);
+        this.mover.registerRule((stack, slot) -> slot >= this.playerInvStart && stack.getItem() == Items.SIGIL_OF_REBIRTH.get(), 2, 3);
         this.mover.registerRule((stack, slot) -> slot < this.playerInvStart, this.playerInvStart, this.hotbarStart + 9);
         this.registerInvShuffleRules();
 
@@ -91,7 +91,7 @@ public class ReforgingMenu extends BlockEntityMenu<ReforgingTableTile> {
         return this.getSlot(1).getItem().getCount();
     }
 
-    public int getDustCount() {
+    public int getSigilCount() {
         return this.getSlot(2).getItem().getCount();
     }
 
@@ -102,7 +102,7 @@ public class ReforgingMenu extends BlockEntityMenu<ReforgingTableTile> {
         return RarityRegistry.getMaterialRarity(s.getItem()).getOptional().orElse(null);
     }
 
-    public int getDustCost(int slot) {
+    public int getSigilCost(int slot) {
         return this.costs[0] * ++slot;
     }
 
@@ -120,7 +120,7 @@ public class ReforgingMenu extends BlockEntityMenu<ReforgingTableTile> {
         if (rarity != null) {
             ReforgingRecipe recipe = this.tile.getRecipeFor(rarity);
             if (recipe != null) {
-                this.costs[0] = recipe.dustCost();
+                this.costs[0] = recipe.sigilCost();
                 this.costs[1] = recipe.matCost();
                 this.costs[2] = recipe.levelCost();
             }
@@ -161,14 +161,14 @@ public class ReforgingMenu extends BlockEntityMenu<ReforgingTableTile> {
             ReforgingRecipe recipe = ReforgingMenu.this.tile.getRecipeFor(rarity);
             if (recipe == null || input.isEmpty()) return false;
 
-            int dust = ReforgingMenu.this.getDustCount();
-            int dustCost = ReforgingMenu.this.getDustCost(this.getSlotIndex());
+            int sigils = ReforgingMenu.this.getSigilCount();
+            int sigilCost = ReforgingMenu.this.getSigilCost(this.getSlotIndex());
             int mats = ReforgingMenu.this.getMatCount();
             int matCost = ReforgingMenu.this.getMatCost(this.getSlotIndex());
             int levels = ReforgingMenu.this.player.experienceLevel;
             int levelCost = ReforgingMenu.this.getLevelCost(this.getSlotIndex());
 
-            if ((dust < dustCost || mats < matCost || levels < levelCost) && !player.isCreative()) return false;
+            if ((sigils < sigilCost || mats < matCost || levels < levelCost) && !player.isCreative()) return false;
 
             return super.mayPickup(playerIn);
         }
@@ -178,11 +178,11 @@ public class ReforgingMenu extends BlockEntityMenu<ReforgingTableTile> {
             if (!player.level().isClientSide) {
                 ReforgingMenu.this.getSlot(0).set(ItemStack.EMPTY);
                 if (!player.isCreative()) {
-                    int dustCost = ReforgingMenu.this.getDustCost(this.getSlotIndex());
+                    int sigilCost = ReforgingMenu.this.getSigilCost(this.getSlotIndex());
                     int matCost = ReforgingMenu.this.getMatCost(this.getSlotIndex());
                     int levelCost = ReforgingMenu.this.getLevelCost(this.getSlotIndex());
                     ReforgingMenu.this.getSlot(1).getItem().shrink(matCost);
-                    ReforgingMenu.this.getSlot(2).getItem().shrink(dustCost);
+                    ReforgingMenu.this.getSlot(2).getItem().shrink(sigilCost);
                     EnchantmentUtils.chargeExperience(player, ApothMiscUtil.getExpCostForSlot(levelCost, this.getSlotIndex()));
                 }
                 player.getPersistentData().putInt(REFORGE_SEED, player.random.nextInt());

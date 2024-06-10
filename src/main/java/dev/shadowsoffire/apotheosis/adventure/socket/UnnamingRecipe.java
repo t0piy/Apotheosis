@@ -25,7 +25,7 @@ public class UnnamingRecipe extends ApothSmithingRecipe {
     private static final ResourceLocation ID = new ResourceLocation("apotheosis:unnaming");
 
     public UnnamingRecipe() {
-        super(ID, Ingredient.EMPTY, Ingredient.of(Items.VIAL_OF_UNNAMING.get()), ItemStack.EMPTY);
+        super(ID, Ingredient.EMPTY, Ingredient.of(Items.SIGIL_OF_UNNAMING.get()), ItemStack.EMPTY);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class UnnamingRecipe extends ApothSmithingRecipe {
         if (base.isEmpty()) return false;
         CompoundTag afxData = base.getTagElement(AffixHelper.AFFIX_DATA);
         boolean hasName = afxData != null && afxData.contains(AffixHelper.NAME, 8);
-        return hasName && pInv.getItem(ADDITION).getItem() == Items.VIAL_OF_UNNAMING.get();
+        return hasName && pInv.getItem(ADDITION).getItem() == Items.SIGIL_OF_UNNAMING.get();
     }
 
     @Override

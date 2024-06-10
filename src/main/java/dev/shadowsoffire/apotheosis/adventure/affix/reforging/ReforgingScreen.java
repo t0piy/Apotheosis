@@ -51,7 +51,7 @@ public class ReforgingScreen extends AdventureContainerScreen<ReforgingMenu> {
         RenderSystem.disableBlend();
         this.renderTooltip(gfx, mouseX, mouseY);
 
-        int dust = this.menu.getDustCount();
+        int sigils = this.menu.getSigilCount();
         int mats = this.menu.getMatCount();
         int levels = this.menu.player.experienceLevel;
 
@@ -62,15 +62,15 @@ public class ReforgingScreen extends AdventureContainerScreen<ReforgingMenu> {
                 if (choice.isEmpty()) continue;
                 List<Component> tooltips = new ArrayList<>();
 
-                int dustCost = this.menu.getDustCost(idx);
+                int sigilCost = this.menu.getSigilCost(idx);
                 int matCost = this.menu.getMatCost(idx);
                 int levelCost = this.menu.getLevelCost(idx);
                 boolean creative = this.minecraft.player.isCreative();
 
                 tooltips.add(Component.translatable("text.apotheosis.reforge_cost").withStyle(ChatFormatting.YELLOW, ChatFormatting.UNDERLINE));
                 tooltips.add(CommonComponents.EMPTY);
-                if (dustCost > 0) {
-                    tooltips.add(Component.translatable("%s %s", dustCost, Items.GEM_DUST.get().getName(ItemStack.EMPTY)).withStyle(creative || dust >= dustCost ? ChatFormatting.GRAY : ChatFormatting.RED));
+                if (sigilCost > 0) {
+                    tooltips.add(Component.translatable("%s %s", sigilCost, Items.SIGIL_OF_REBIRTH.get().getName(ItemStack.EMPTY)).withStyle(creative || sigils >= sigilCost ? ChatFormatting.GRAY : ChatFormatting.RED));
                 }
                 if (matCost > 0) {
                     tooltips.add(Component.translatable("%s %s", matCost, this.menu.getSlot(1).getItem().getHoverName().getString()).withStyle(creative || mats >= matCost ? ChatFormatting.GRAY : ChatFormatting.RED));
@@ -115,7 +115,7 @@ public class ReforgingScreen extends AdventureContainerScreen<ReforgingMenu> {
             gfx.blit(ANIMATED_TEXTURE, left + 26, top + 15, 127, 112, 0, frame * 112, 127, 112, 127, 2240);
         }
 
-        int dust = this.menu.getDustCount();
+        int sigils = this.menu.getSigilCount();
         int mats = this.menu.getMatCount();
         int levels = this.menu.player.experienceLevel;
 
@@ -125,11 +125,11 @@ public class ReforgingScreen extends AdventureContainerScreen<ReforgingMenu> {
             Slot slot = this.getMenu().getSlot(3 + idx);
             if (!slot.hasItem()) break;
 
-            int dustCost = this.menu.getDustCost(idx);
+            int sigilCost = this.menu.getSigilCost(idx);
             int matCost = this.menu.getMatCost(idx);
             int levelCost = this.menu.getLevelCost(idx);
 
-            if ((dust >= dustCost && levels >= levelCost && mats >= matCost) || this.minecraft.player.getAbilities().instabuild) {
+            if ((sigils >= sigilCost && levels >= levelCost && mats >= matCost) || this.minecraft.player.getAbilities().instabuild) {
                 this.maxSlot++;
             }
         }

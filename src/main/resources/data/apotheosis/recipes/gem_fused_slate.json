@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "conditions": [{
 	"type": "apotheosis:module",
-    "module": "enchantment"
+    "module": "adventure"
   }],
-  "group": "lemons",
+  "group": "gorilla",
   "pattern": [
     "EEE",
-    "BBB",
+    "EBE",
     "EEE"
   ],
   "key": {
@@ -15,11 +15,11 @@
       "tag": "apotheosis:deepslate"
     },
 	"B": {
-      "item": "minecraft:book"
+      "item": "apotheosis:gem_dust"
     }
   },
   "result": {
-    "item": "apotheosis:dormant_deepshelf",
-    "count": 1
+    "item": "apotheosis:gem_fused_slate",
+    "count": 8
   }
 }

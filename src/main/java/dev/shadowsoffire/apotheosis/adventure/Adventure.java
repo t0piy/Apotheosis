@@ -17,7 +17,7 @@ import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemItem;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.cutting.GemCuttingBlock;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.cutting.GemCuttingMenu;
-import dev.shadowsoffire.apotheosis.ench.objects.GlowyBlockItem.GlowyItem;
+import dev.shadowsoffire.apotheosis.util.TooltipItem;
 import dev.shadowsoffire.placebo.menu.MenuUtil;
 import dev.shadowsoffire.placebo.registry.DeferredHelper;
 import net.minecraft.core.registries.Registries;
@@ -27,6 +27,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -73,19 +74,17 @@ public class Adventure {
 
         public static final RegistryObject<Item> GEM_DUST = R.item("gem_dust", () -> new Item(new Item.Properties()));
 
-        public static final RegistryObject<Item> VIAL_OF_EXPULSION = R.item("vial_of_expulsion", () -> new Item(new Item.Properties()));
+        public static final RegistryObject<Item> GEM_FUSED_SLATE = R.item("gem_fused_slate", () -> new Item(new Item.Properties()));
 
-        public static final RegistryObject<Item> VIAL_OF_EXTRACTION = R.item("vial_of_extraction", () -> new Item(new Item.Properties()));
+        public static final RegistryObject<Item> SIGIL_OF_SOCKETING = R.item("sigil_of_socketing", () -> new TooltipItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
-        public static final RegistryObject<Item> VIAL_OF_UNNAMING = R.item("vial_of_unnaming", () -> new Item(new Item.Properties()));
+        public static final RegistryObject<Item> SIGIL_OF_WITHDRAWAL = R.item("sigil_of_withdrawal", () -> new TooltipItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
-        public static final RegistryObject<Item> SIGIL_OF_SOCKETING = R.item("sigil_of_socketing", () -> new Item(new Item.Properties()));
+        public static final RegistryObject<Item> SIGIL_OF_REBIRTH = R.item("sigil_of_rebirth", () -> new TooltipItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
-        public static final RegistryObject<Item> SUPERIOR_SIGIL_OF_SOCKETING = R.item("superior_sigil_of_socketing", () -> new GlowyItem(new Item.Properties()));
+        public static final RegistryObject<Item> SIGIL_OF_ENHANCEMENT = R.item("sigil_of_enhancement", () -> new TooltipItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
-        public static final RegistryObject<Item> SIGIL_OF_ENHANCEMENT = R.item("sigil_of_enhancement", () -> new Item(new Item.Properties()));
-
-        public static final RegistryObject<Item> SUPERIOR_SIGIL_OF_ENHANCEMENT = R.item("superior_sigil_of_enhancement", () -> new GlowyItem(new Item.Properties()));
+        public static final RegistryObject<Item> SIGIL_OF_UNNAMING = R.item("sigil_of_unnaming", () -> new TooltipItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
         public static final RegistryObject<Item> BOSS_SUMMONER = R.item("boss_summoner", () -> new BossSummonerItem(new Item.Properties()));
 

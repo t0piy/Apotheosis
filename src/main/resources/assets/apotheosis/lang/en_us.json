@@ -391,10 +391,22 @@
     "item.apotheosis.epic_material": "Arcane Sands",
     "item.apotheosis.mythic_material": "Godforged Pearl",
     "item.apotheosis.ancient_material": "Manifestation of Infinity",
+    "item.apotheosis.gem_fused_slate": "Gem-Fused Slate",
+
     "item.apotheosis.sigil_of_socketing": "Sigil of Socketing",
-    "item.apotheosis.superior_sigil_of_socketing": "Superior Sigil of Socketing",
-    "item.apotheosis.sigil_of_enhancement": "[NYI] Sigil of Enhancement",
-    "item.apotheosis.superior_sigil_of_enhancement": "[NYI] Superior Sigil of Enhancement",
+    "item.apotheosis.sigil_of_socketing.desc": "Adds one socket to an item",
+
+    "item.apotheosis.sigil_of_withdrawal": "Sigil of Withdrawal",
+    "item.apotheosis.sigil_of_withdrawal.desc": "Removes all socketed gems from an item",
+
+    "item.apotheosis.sigil_of_rebirth": "Sigil of Rebirth",
+    "item.apotheosis.sigil_of_rebirth.desc": "Used to fuel the Reforging Table",
+
+    "item.apotheosis.sigil_of_enhancement": "Sigil of Enhancement",
+    "item.apotheosis.sigil_of_enhancement.desc": "Used to fuel the Augmentation Table",
+
+    "item.apotheosis.sigil_of_unnaming": "Sigil of Unnaming",
+    "item.apotheosis.sigil_of_unnaming.desc": "Removes the affixed name from an item",
 
     "block.apotheosis.boss_spawner": "Boss Spawner",
     "block.apotheosis.gem_cutting_table": "Gem Cutting Table",
