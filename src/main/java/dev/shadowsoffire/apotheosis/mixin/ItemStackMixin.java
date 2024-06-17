@@ -17,8 +17,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
+import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
 import dev.shadowsoffire.apotheosis.ench.asm.EnchHooks;
+import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +39,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 public class ItemStackMixin {
 
     @Inject(method = "getHoverName", at = @At("RETURN"), cancellable = true)
-    public void apoth_affixItemName(CallbackInfoReturnable<Component> ci) {
+    public void apoth_affixItemName(CallbackInfoReturnable<Component> cir) {
         ItemStack ths = (ItemStack) (Object) this;
         CompoundTag afxData = ths.getTagElement(AffixHelper.AFFIX_DATA);
         if (afxData != null && afxData.contains(AffixHelper.NAME, 8)) {
@@ -45,14 +47,20 @@ public class ItemStackMixin {
                 Component component = AffixHelper.getName(ths);
                 if (component.getContents() instanceof TranslatableContents tContents) {
                     int idx = "misc.apotheosis.affix_name.four".equals(tContents.getKey()) ? 2 : 1;
-                    tContents.getArgs()[idx] = ci.getReturnValue();
-                    ci.setReturnValue(component);
+                    tContents.getArgs()[idx] = cir.getReturnValue();
+                    cir.setReturnValue(component);
                 }
                 else afxData.remove(AffixHelper.NAME);
             }
             catch (Exception exception) {
                 afxData.remove(AffixHelper.NAME);
             }
+        }
+
+        DynamicHolder<LootRarity> rarity = AffixHelper.getRarity(afxData);
+        if (rarity.isBound()) {
+            Component recolored = cir.getReturnValue().copy().withStyle(s -> s.withColor(rarity.get().getColor()));
+            cir.setReturnValue(recolored);
         }
     }
 

@@ -20,7 +20,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -114,11 +113,7 @@ public class AffixHelper {
     }
 
     public static void setRarity(ItemStack stack, LootRarity rarity) {
-        Component comp = Component.translatable("%s", Component.literal("")).withStyle(Style.EMPTY.withColor(rarity.getColor()));
         CompoundTag afxData = stack.getOrCreateTagElement(AFFIX_DATA);
-        afxData.putString(NAME, Component.Serializer.toJson(comp));
-        // if (!stack.getOrCreateTagElement(DISPLAY).contains(LORE)) AffixHelper.addLore(stack,
-        // Component.translatable("info.apotheosis.affix_item").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GRAY).withItalic(false)));
         afxData.putString(RARITY, RarityRegistry.INSTANCE.getKey(rarity).toString());
     }
 

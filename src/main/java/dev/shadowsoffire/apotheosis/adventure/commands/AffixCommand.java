@@ -3,6 +3,7 @@ package dev.shadowsoffire.apotheosis.adventure.commands;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -31,6 +32,22 @@ public class AffixCommand {
 
     public static final SuggestionProvider<CommandSourceStack> SUGGEST_AFFIX = (ctx, builder) -> SharedSuggestionProvider.suggest(AffixRegistry.INSTANCE.getKeys().stream().map(ResourceLocation::toString), builder);
 
+    public static final SuggestionProvider<CommandSourceStack> SUGGEST_APPLICABLE_AFFIX = (ctx, builder) -> {
+        Entity entity = ctx.getSource().getEntity();
+        if (entity instanceof LivingEntity living) {
+            ItemStack held = living.getMainHandItem();
+            if (!held.isEmpty()) {
+                LootCategory cat = LootCategory.forItem(held);
+                DynamicHolder<LootRarity> rarity = AffixHelper.getRarity(held);
+                if (!cat.isNone() && rarity.isBound()) {
+                    Stream<String> suggestions = AffixRegistry.INSTANCE.getValues().stream().filter(a -> a.canApplyTo(held, cat, rarity.get())).map(AffixRegistry.INSTANCE::getKey).map(ResourceLocation::toString);
+                    return SharedSuggestionProvider.suggest(suggestions, builder);
+                }
+            }
+        }
+        return SharedSuggestionProvider.suggest(Collections.emptyList(), builder);
+    };
+
     public static final SuggestionProvider<CommandSourceStack> SUGGEST_AFFIX_ON_ITEM = (ctx, builder) -> {
         Entity entity = ctx.getSource().getEntity();
         if (entity instanceof LivingEntity living) {
@@ -48,7 +65,7 @@ public class AffixCommand {
 
         builder.then(
             Commands.literal("apply")
-                .then(Commands.argument("affix", ResourceLocationArgument.id()).suggests(SUGGEST_AFFIX)
+                .then(Commands.argument("affix", ResourceLocationArgument.id()).suggests(SUGGEST_APPLICABLE_AFFIX)
                     .then(Commands.argument("level", FloatArgumentType.floatArg(0, 1))
                         .executes(c -> applyAffix(c, ResourceLocationArgument.getId(c, "affix"), FloatArgumentType.getFloat(c, "level"))))
                     .executes(c -> applyAffix(c, ResourceLocationArgument.getId(c, "affix"), c.getSource().getLevel().random.nextFloat()))));
