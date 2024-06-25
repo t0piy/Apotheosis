@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.shadowsoffire.apotheosis.Apotheosis;
 import dev.shadowsoffire.apotheosis.adventure.Adventure;
@@ -186,15 +187,19 @@ public class ReforgingScreen extends AdventureContainerScreen<ReforgingMenu> {
     }
 
     @Override
-    public void renderSlot(GuiGraphics pGuiGraphics, Slot pSlot) {
-        if (pSlot instanceof ReforgingResultSlot) {
+    public void renderSlot(GuiGraphics gfx, Slot slot) {
+        if (slot instanceof ReforgingResultSlot) {
             if (this.animationTick == 0) {
-                int opacity = this.maxSlot >= pSlot.getContainerSlot() ? this.availableOpacity : 0x40;
-                SalvagingScreen.renderGuiItem(pGuiGraphics, pSlot.getItem(), pSlot.x, pSlot.y, GhostVertexBuilder.makeGhostBuffer(opacity));
+                int opacity = this.maxSlot >= slot.getContainerSlot() ? this.availableOpacity : 0x40;
+                PoseStack pose = gfx.pose();
+                pose.pushPose();
+                pose.translate(0.0F, 0.0F, 100.0F);
+                SalvagingScreen.renderGuiItem(gfx, slot.getItem(), slot.x, slot.y, GhostVertexBuilder.makeGhostBuffer(opacity));
+                pose.popPose();
             }
         }
         else {
-            super.renderSlot(pGuiGraphics, pSlot);
+            super.renderSlot(gfx, slot);
         }
     }
 
