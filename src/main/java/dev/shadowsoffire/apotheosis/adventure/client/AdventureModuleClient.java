@@ -28,6 +28,8 @@ import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixRegistry;
+import dev.shadowsoffire.apotheosis.adventure.affix.augmenting.AugmentingScreen;
+import dev.shadowsoffire.apotheosis.adventure.affix.augmenting.AugmentingTableTileRenderer;
 import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingScreen;
 import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingTableTileRenderer;
 import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvagingScreen;
@@ -54,7 +56,9 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.resources.ResourceLocation;
@@ -90,7 +94,9 @@ public class AdventureModuleClient {
         MenuScreens.register(Menus.REFORGING.get(), ReforgingScreen::new);
         MenuScreens.register(Menus.SALVAGE.get(), SalvagingScreen::new);
         MenuScreens.register(Menus.GEM_CUTTING.get(), GemCuttingScreen::new);
+        MenuScreens.register(Menus.AUGMENTING.get(), AugmentingScreen::new);
         BlockEntityRenderers.register(Apoth.Tiles.REFORGING_TABLE.get(), k -> new ReforgingTableTileRenderer());
+        BlockEntityRenderers.register(Apoth.Tiles.AUGMENTING_TABLE.get(), k -> new AugmentingTableTileRenderer());
         MinecraftForge.EVENT_BUS.register(AdventureKeys.class);
     }
 
@@ -220,7 +226,13 @@ public class AdventureModuleClient {
             Consumer<Component> dotPrefixer = afxComp -> {
                 components.add(Component.translatable("text.apotheosis.dot_prefix", afxComp).withStyle(ChatFormatting.YELLOW));
             };
-            affixes.values().stream().sorted(Comparator.comparingInt(a -> a.affix().get().getType().ordinal())).forEach(inst -> inst.addInformation(dotPrefixer));
+
+            affixes.values().stream()
+                .sorted(Comparator.comparingInt(a -> a.affix().get().getType().ordinal()))
+                .map(AffixInstance::getDescription)
+                .filter(c -> c.getContents() != ComponentContents.EMPTY)
+                .forEach(dotPrefixer);
+
             e.getToolTip().addAll(1, components);
         }
     }

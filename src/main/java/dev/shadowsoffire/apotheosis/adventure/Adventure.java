@@ -2,6 +2,8 @@ package dev.shadowsoffire.apotheosis.adventure;
 
 import dev.shadowsoffire.apotheosis.Apotheosis;
 import dev.shadowsoffire.apotheosis.Apotheosis.ModularDeferredHelper;
+import dev.shadowsoffire.apotheosis.adventure.affix.augmenting.AugmentingMenu;
+import dev.shadowsoffire.apotheosis.adventure.affix.augmenting.AugmentingTableBlock;
 import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingMenu;
 import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingTableBlock;
 import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvageItem;
@@ -54,6 +56,9 @@ public class Adventure {
         public static final RegistryObject<GemCuttingBlock> GEM_CUTTING_TABLE = R.block("gem_cutting_table",
             () -> new GemCuttingBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(2.5F)));
 
+        public static final RegistryObject<AugmentingTableBlock> AUGMENTING_TABLE = R.block("augmenting_table",
+            () -> new AugmentingTableBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(4, 1000F)));
+
         private static void bootstrap() {}
 
     }
@@ -96,6 +101,8 @@ public class Adventure {
 
         public static final RegistryObject<Item> GEM_CUTTING_TABLE = R.item("gem_cutting_table", () -> new BlockItem(Blocks.GEM_CUTTING_TABLE.get(), new Item.Properties()));
 
+        public static final RegistryObject<Item> AUGMENTING_TABLE = R.item("augmenting_table", () -> new BlockItem(Blocks.AUGMENTING_TABLE.get(), new Item.Properties()));
+
         public static final RegistryObject<Item> GEM = R.item("gem", () -> new GemItem(new Item.Properties()));
 
         private static RegistryObject<Item> rarityMat(String id) {
@@ -127,6 +134,8 @@ public class Adventure {
         public static final RegistryObject<MenuType<SalvagingMenu>> SALVAGE = R.menu("salvage", () -> MenuUtil.posType(SalvagingMenu::new));
 
         public static final RegistryObject<MenuType<GemCuttingMenu>> GEM_CUTTING = R.menu("gem_cutting", () -> MenuUtil.type(GemCuttingMenu::new));
+
+        public static final RegistryObject<MenuType<AugmentingMenu>> AUGMENTING = R.menu("augmenting", () -> MenuUtil.posType(AugmentingMenu::new));
 
         private static void bootstrap() {}
     }

@@ -1,6 +1,7 @@
 package dev.shadowsoffire.apotheosis;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixRegistry;
+import dev.shadowsoffire.apotheosis.adventure.affix.augmenting.AugmentingTableTile;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.FestiveAffix;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.MagicalArrowAffix;
@@ -128,6 +129,7 @@ public class Apoth {
         public static final RegistryObject<BlockEntityType<BossSpawnerTile>> BOSS_SPAWNER = R.blockEntity("BOSS_SPAWNER");
         public static final RegistryObject<BlockEntityType<ReforgingTableTile>> REFORGING_TABLE = R.blockEntity("REFORGING_TABLE");
         public static final RegistryObject<BlockEntityType<SalvagingTableTile>> SALVAGING_TABLE = R.blockEntity("SALVAGING_TABLE");
+        public static final RegistryObject<BlockEntityType<AugmentingTableTile>> AUGMENTING_TABLE = R.blockEntity("augmenting_table");
     }
 
     public static final class Affixes {
