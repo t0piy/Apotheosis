@@ -14,6 +14,7 @@ import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import dev.shadowsoffire.placebo.tabs.ITabFiller;
 import net.minecraft.ChatFormatting;
+import net.minecraft.ResourceLocationException;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -166,8 +167,17 @@ public class GemItem extends Item implements ITabFiller {
      * @returns A {@link DynamicHolder} targetting the gem, which may be unbound if the gem is missing or invalid.
      */
     public static DynamicHolder<Gem> getGem(ItemStack gem) {
-        if (gem.getItem() != Items.GEM.get() || !gem.hasTag()) return GemRegistry.INSTANCE.emptyHolder();
-        var tag = gem.getTag();
-        return GemRegistry.INSTANCE.holder(new ResourceLocation(tag.getString(GEM)));
+        if (gem.getItem() != Items.GEM.get() || !gem.hasTag()) {
+            return GemRegistry.INSTANCE.emptyHolder();
+        }
+
+        try {
+            CompoundTag tag = gem.getTag();
+            return GemRegistry.INSTANCE.holder(new ResourceLocation(tag.getString(GEM)));
+        }
+        catch (ResourceLocationException ex) {
+            return GemRegistry.INSTANCE.emptyHolder();
+        }
+
     }
 }
