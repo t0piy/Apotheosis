@@ -426,6 +426,10 @@
     "button.apotheosis.upgrade.no": "Missing Inputs",
     "button.apotheosis.augmenting.upgrade": "Upgrade Selected Affix",
     "button.apotheosis.augmenting.reroll": "Reroll Selected Affix",
+    "button.apotheosis.augmenting.no_selection": "No Affix Selected",
+    "button.apotheosis.augmenting.max_level": "Already Max Level",
+    "button.apotheosis.augmenting.no_alternatives": "No Alternative Affixes",
+    "button.apotheosis.augmenting.upgrade.cost": "Cost: %sx %s",
 
     "menu.apotheosis.gem_cutting": "Gem Cutting",
     "container.apotheosis.salvage": "Salvage",
