@@ -44,7 +44,7 @@ public abstract class DropDownList<T> extends AbstractWidget {
     }
 
     @Override
-    public void onClick(double mouseX, double mouseY, int button) {
+    public void onClick(double mouseX, double mouseY) {
         if (!isOpen) {
             if (this.entries.isEmpty()) {
                 return;
