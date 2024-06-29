@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.shadowsoffire.apotheosis.Apotheosis;
@@ -17,10 +18,16 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootController;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.StringSplitter;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -34,11 +41,18 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
      */
     public static final ResourceLocation TEXTURE = new ResourceLocation(Apotheosis.MODID, "textures/gui/augmenting.png");
 
+    public static final int ALTERNATIVE_TEXT_WIDTH = 150;
+    public static final int ALTERNATIVE_MAX_LINES = 15;
+
     protected ItemStack lastMainItem = ItemStack.EMPTY;
     protected int lastSelection = DropDownList.NO_SELECTION;
 
     protected List<AffixInstance> currentItemAffixes = Collections.emptyList();
-    protected List<DynamicHolder<? extends Affix>> alternatives = Collections.emptyList();
+
+    protected int alternativePage = DropDownList.NO_SELECTION;
+    protected List<List<FormattedText>> alternativePages = Collections.emptyList();
+    protected int alternativeXPos = 0;
+    protected int alternativeWidth = 0;
 
     protected AffixDropList list;
     protected SimpleTexButton upgradeBtn, rerollBtn;
@@ -102,34 +116,33 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
                 gfx.drawString(font, split.get(i), left + 43, top + 40 + i * 11, ChatFormatting.YELLOW.getColor(), true);
             }
 
-            int BACKGROUND_COLOR = 0xF0100010;
-            int BORDER_COLOR_TOP = 0xFF36454F;
-            int BORDER_COLOR_BOTTOM = 0xFF36454F;
-            TooltipRenderUtil.renderTooltipBackground(gfx, left + 42, top + 39, 117, 6 * 11 - 1, 0, BACKGROUND_COLOR, BACKGROUND_COLOR, BORDER_COLOR_TOP, BORDER_COLOR_BOTTOM);
+            int bgColor = 0xF0100010;
+            int borderColor = 0xFF36454F;
+            TooltipRenderUtil.renderTooltipBackground(gfx, left + 42, top + 39, 117, 6 * 11 - 1, 0, bgColor, bgColor, borderColor, borderColor);
         }
         else {
-            int BACKGROUND_COLOR = 0xAA101010;
-            int BORDER_COLOR_TOP = 0xAA36454F;
-            int BORDER_COLOR_BOTTOM = 0xAA36454F;
-            TooltipRenderUtil.renderTooltipBackground(gfx, left + 42, top + 39, 117, 6 * 11 - 1, 0, BACKGROUND_COLOR, BACKGROUND_COLOR, BORDER_COLOR_TOP, BORDER_COLOR_BOTTOM);
+            int bgColor = 0xAA101010;
+            int borderColor = 0xAA36454F;
+            TooltipRenderUtil.renderTooltipBackground(gfx, left + 42, top + 39, 117, 6 * 11 - 1, 0, bgColor, bgColor, borderColor, borderColor);
         }
 
         if (selected != DropDownList.NO_SELECTION && this.rerollBtn.isHovered() && this.rerollBtn.isActive()) {
-            AffixInstance inst = this.currentItemAffixes.get(selected);
+            if (alternativePage != DropDownList.NO_SELECTION) {
+                List<FormattedText> page = this.alternativePages.get(this.alternativePage);
 
-            List<Component> altText = new ArrayList<>();
+                List<ClientTooltipComponent> list = page.stream()
+                    .map(Language.getInstance()::getVisualOrder)
+                    .map(ClientTooltipComponent::create)
+                    .collect(Collectors.toCollection(Lists::newArrayList));
 
-            if (!alternatives.isEmpty()) {
-                altText.add(Component.literal("Potential Rerolls").withStyle(ChatFormatting.GOLD, ChatFormatting.UNDERLINE));
-                for (var afx : alternatives) {
-                    Component augTxt = afx.get().getAugmentingText(inst.stack(), inst.rarity().get(), inst.level());
-                    altText.add(Component.translatable("%s", augTxt).withStyle(ChatFormatting.YELLOW));
-                    altText.add(CommonComponents.SPACE);
+                // We want the rendered tooltip box to have a consistent width when we have pages, regardless of the width of the individual pages.
+                // So we replace the empty space on the second-to-last line with empty space of the correct width.
+                if (this.alternativePages.size() > 1) {
+                    list.set(list.size() - 2, new FakeWidthComponent(this.alternativeWidth));
                 }
-                altText.remove(altText.size() - 1);
-            }
 
-            this.drawOnLeft(gfx, altText, top + 33, 150);
+                gfx.renderTooltipInternal(font, list, this.alternativeXPos, this.getGuiTop() + 33, DefaultTooltipPositioner.INSTANCE);
+            }
         }
 
         if (selected != DropDownList.NO_SELECTION && this.upgradeBtn.isActive() && this.upgradeBtn.isHovered()) {
@@ -137,9 +150,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
             AffixInstance upgraded = new AffixInstance(inst.affix(), inst.stack(), inst.rarity(), Math.min(1F, inst.level() + 0.25F));
 
             List<Component> altText = new ArrayList<>();
-
-            altText.add(Component.literal("Upgraded Form").withStyle(ChatFormatting.GOLD, ChatFormatting.UNDERLINE));
-
+            altText.add(Component.translatable("text.apotheosis.upgraded_form").withStyle(ChatFormatting.GOLD, ChatFormatting.UNDERLINE));
             altText.add(Component.translatable("%s", upgraded.getAugmentingText()).withStyle(ChatFormatting.YELLOW));
 
             this.drawOnLeft(gfx, altText, top + 33, 150);
@@ -161,12 +172,12 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
 
             this.currentItemAffixes = newAffixes;
             this.lastMainItem = mainItem.copy();
-            this.alternatives = this.computeAlternatives(this.list.getSelected());
+            this.computeAlternatives(this.list.getSelected());
         }
 
         if (this.lastSelection != this.list.getSelected()) {
             this.lastSelection = this.list.getSelected();
-            this.alternatives = this.computeAlternatives(lastSelection);
+            this.computeAlternatives(lastSelection);
         }
 
         int selected = this.getSelectedAffix();
@@ -188,7 +199,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
                 this.upgradeBtn.setInactiveMessage(Component.translatable("button.apotheosis.augmenting.max_level").withStyle(ChatFormatting.RED));
             }
 
-            if (this.alternatives.isEmpty()) {
+            if (this.alternativePages.isEmpty()) {
                 this.rerollBtn.active = false;
                 this.rerollBtn.setInactiveMessage(Component.translatable("button.apotheosis.augmenting.no_alternatives").withStyle(ChatFormatting.RED));
             }
@@ -205,13 +216,71 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
         }
     }
 
-    protected List<DynamicHolder<? extends Affix>> computeAlternatives(int selected) {
+    protected void computeAlternatives(int selected) {
         if (selected == DropDownList.NO_SELECTION) {
-            return Collections.emptyList();
+            this.alternativePages = Collections.emptyList();
+            this.alternativePage = DropDownList.NO_SELECTION;
+            return;
         }
+
         AffixInstance current = this.currentItemAffixes.get(selected);
-        return LootController.getAvailableAffixes(this.lastMainItem, current.rarity().get(), this.currentItemAffixes.stream().map(AffixInstance::affix).collect(Collectors.toSet()),
-            current.affix().get().getType());
+        List<DynamicHolder<? extends Affix>> alternatives = LootController.getAvailableAffixes(this.lastMainItem, current.rarity().get(),
+            this.currentItemAffixes.stream().map(AffixInstance::affix).collect(Collectors.toSet()), current.affix().get().getType());
+
+        if (alternatives.isEmpty()) {
+            this.alternativePages = Collections.emptyList();
+            this.alternativePage = DropDownList.NO_SELECTION;
+        }
+        else {
+            StringSplitter splitter = this.font.getSplitter();
+
+            {
+                int maxWidth = 0;
+                Component heading = Component.translatable("text.apotheosis.potential_rerolls").withStyle(ChatFormatting.GOLD, ChatFormatting.UNDERLINE);
+                List<List<FormattedText>> pages = new ArrayList<>();
+                List<FormattedText> page = new ArrayList<>();
+                page.add(heading);
+                boolean first = true; // For the first line in the first page, we have to skip the initial newline.
+                for (DynamicHolder<? extends Affix> afx : alternatives) {
+                    Component augTxt = afx.get().getAugmentingText(current.stack(), current.rarity().get(), current.level());
+                    List<FormattedText> split = splitter.splitLines(Component.translatable("%s", augTxt).withStyle(ChatFormatting.YELLOW), ALTERNATIVE_TEXT_WIDTH, augTxt.getStyle());
+                    maxWidth = Math.max(maxWidth, split.stream().map(ths().font::width).max(Integer::compare).get());
+
+                    if (page.size() + split.size() + 1 > ALTERNATIVE_MAX_LINES) {
+                        pages.add(page);
+                        page = new ArrayList<>();
+                        page.add(heading);
+                        page.addAll(split);
+                    }
+                    else {
+                        if (!first) {
+                            page.add(CommonComponents.SPACE);
+                        }
+                        page.addAll(split);
+                        first = false;
+                    }
+
+                    if (afx == alternatives.get(alternatives.size() - 1)) {
+                        pages.add(page);
+                    }
+                }
+
+                this.alternativePage = 0;
+                this.alternativePages = pages;
+                this.alternativeXPos = ths().getGuiLeft() - 16 - maxWidth;
+                this.alternativeWidth = maxWidth;
+            }
+
+            int pages = this.alternativePages.size();
+            if (pages > 1) {
+
+                for (int i = 0; i < pages; i++) {
+                    List<FormattedText> page = this.alternativePages.get(i);
+                    page.add(CommonComponents.SPACE);
+                    page.add(Component.translatable("text.apotheosis.alternative_page", i + 1, pages).withStyle(ChatFormatting.DARK_GRAY));
+                }
+            }
+        }
     }
 
     protected int getSelectedAffix() {
@@ -323,6 +392,34 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
 
                 gfx.renderComponentTooltip(Minecraft.getInstance().font, tooltips, pMouseX, pMouseY);
             }
+        }
+
+        @Override
+        public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+            if (this == AugmentingScreen.this.rerollBtn && this.isActive() && this.isHovered()) {
+                int change = pDelta < 0 ? 1 : -1;
+                int page = AugmentingScreen.this.alternativePage;
+
+                page = Math.floorMod((page + change), AugmentingScreen.this.alternativePages.size());
+
+                AugmentingScreen.this.alternativePage = page;
+                return true;
+            }
+            return super.mouseScrolled(pMouseX, pMouseY, pDelta);
+        }
+
+    }
+
+    public static record FakeWidthComponent(int width) implements ClientTooltipComponent {
+
+        @Override
+        public int getHeight() {
+            return 9; // Font#lineHeight
+        }
+
+        @Override
+        public int getWidth(Font pFont) {
+            return width;
         }
 
     }
