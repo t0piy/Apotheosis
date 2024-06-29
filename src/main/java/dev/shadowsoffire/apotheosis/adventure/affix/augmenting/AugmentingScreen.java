@@ -98,7 +98,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
 
     @Override
     protected void renderBg(GuiGraphics gfx, float partialTick, int mouseX, int mouseY) {
-        updateCachedState();
+        this.updateCachedState();
 
         int left = this.getGuiLeft();
         int top = this.getGuiTop();
@@ -111,9 +111,9 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
         if (selected != DropDownList.NO_SELECTION && !this.list.isOpen()) {
             AffixInstance inst = this.currentItemAffixes.get(selected);
             Component comp = inst.getAugmentingText();
-            List<FormattedCharSequence> split = font.split(comp, 117);
+            List<FormattedCharSequence> split = this.font.split(comp, 117);
             for (int i = 0; i < split.size(); i++) {
-                gfx.drawString(font, split.get(i), left + 43, top + 40 + i * 11, ChatFormatting.YELLOW.getColor(), true);
+                gfx.drawString(this.font, split.get(i), left + 43, top + 40 + i * 11, ChatFormatting.YELLOW.getColor(), true);
             }
 
             int bgColor = 0xF0100010;
@@ -127,7 +127,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
         }
 
         if (selected != DropDownList.NO_SELECTION && this.rerollBtn.isHovered() && this.rerollBtn.isActive()) {
-            if (alternativePage != DropDownList.NO_SELECTION) {
+            if (this.alternativePage != DropDownList.NO_SELECTION) {
                 List<FormattedText> page = this.alternativePages.get(this.alternativePage);
 
                 List<ClientTooltipComponent> list = page.stream()
@@ -141,7 +141,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
                     list.set(list.size() - 2, new FakeWidthComponent(this.alternativeWidth));
                 }
 
-                gfx.renderTooltipInternal(font, list, this.alternativeXPos, this.getGuiTop() + 33, DefaultTooltipPositioner.INSTANCE);
+                gfx.renderTooltipInternal(this.font, list, this.alternativeXPos, this.getGuiTop() + 33, DefaultTooltipPositioner.INSTANCE);
             }
         }
 
@@ -177,7 +177,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
 
         if (this.lastSelection != this.list.getSelected()) {
             this.lastSelection = this.list.getSelected();
-            this.computeAlternatives(lastSelection);
+            this.computeAlternatives(this.lastSelection);
         }
 
         int selected = this.getSelectedAffix();
@@ -244,7 +244,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
                 for (DynamicHolder<? extends Affix> afx : alternatives) {
                     Component augTxt = afx.get().getAugmentingText(current.stack(), current.rarity().get(), current.level());
                     List<FormattedText> split = splitter.splitLines(Component.translatable("%s", augTxt).withStyle(ChatFormatting.YELLOW), ALTERNATIVE_TEXT_WIDTH, augTxt.getStyle());
-                    maxWidth = Math.max(maxWidth, split.stream().map(ths().font::width).max(Integer::compare).get());
+                    maxWidth = Math.max(maxWidth, split.stream().map(this.ths().font::width).max(Integer::compare).get());
 
                     if (page.size() + split.size() + 1 > ALTERNATIVE_MAX_LINES) {
                         pages.add(page);
@@ -267,7 +267,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
 
                 this.alternativePage = 0;
                 this.alternativePages = pages;
-                this.alternativeXPos = ths().getGuiLeft() - 16 - maxWidth;
+                this.alternativeXPos = this.ths().getGuiLeft() - 16 - maxWidth;
                 this.alternativeWidth = maxWidth;
             }
 
@@ -358,7 +358,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
         public void renderWidget(GuiGraphics gfx, int pMouseX, int pMouseY, float pPartialTick) {
             int yTex = this.yTexStart - 2;
             if (!this.isActive()) {
-                yTex += (this.height + 4);
+                yTex += this.height + 4;
             }
             else if (this.isHovered()) {
                 yTex += (this.height + 4) * 2;
@@ -400,7 +400,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
                 int change = pDelta < 0 ? 1 : -1;
                 int page = AugmentingScreen.this.alternativePage;
 
-                page = Math.floorMod((page + change), AugmentingScreen.this.alternativePages.size());
+                page = Math.floorMod(page + change, AugmentingScreen.this.alternativePages.size());
 
                 AugmentingScreen.this.alternativePage = page;
                 return true;
@@ -419,7 +419,7 @@ public class AugmentingScreen extends AdventureContainerScreen<AugmentingMenu> {
 
         @Override
         public int getWidth(Font pFont) {
-            return width;
+            return this.width;
         }
 
     }
