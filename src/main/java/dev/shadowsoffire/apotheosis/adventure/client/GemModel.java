@@ -33,7 +33,8 @@ public class GemModel implements BakedModel {
         this.overrides = new ItemOverrides(){
             @Override
             public BakedModel resolve(BakedModel original, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
-                return GemModel.this.resolve(original, stack, world, entity, seed);
+                BakedModel specific = GemModel.this.resolve(original, stack, world, entity, seed);
+                return specific.getOverrides().resolve(specific, stack, world, entity, seed);
             }
         };
     }
