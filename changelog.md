@@ -1,3 +1,11 @@
+## 7.4.1
+* mc-kaishixiaxue: Updated Chinese translation.
+* Quarkrus: Updated Russian translation.
+* Fixed an issue in the Korean translation where Infusion Enchanting displayed incorrectly in JEI.
+* Added a blacklist for the potion charm, which can prevent creating charms of certain effects.
+* Added the necessary code to allow Gems to have per-rarity texture overrides using item properties.
+  * The property name is `apotheosis:rarity` and the value of the properity is the ordinal of the current rarity.
+
 ## 7.4.0
 Welcome to Apotheosis 7.4.0 - Augmented Affixation!  
 This update brings a huge visual overhaul to the Adventure Module, fleshes out Sigils, and adds the endgame-worthy Augmenting Table.
