@@ -12,6 +12,7 @@
     "misc.apotheosis.affix_name.two": "%s的%s",
     "misc.apotheosis.affix_name.three": "%s的%s（%s）",
     "misc.apotheosis.affix_name.four": "%s %s的%s（%s）",
+    "misc.apotheosis.affix_bounds": "[%s\u00A0-\u00A0%s]",
 
     "misc.apotheosis.radial_state_updated": "径向挖掘模式已更新为“%s”",
     "misc.apotheosis.radial_state.require_not_sneaking": "潜行时禁用",
@@ -287,10 +288,8 @@
     "affix.apotheosis:armor/mob_effect/bursting": "迸发",
     "affix.apotheosis:armor/mob_effect/bursting.suffix": "活力",
 
-    "affix.apotheosis:socket": "",
-    "affix.apotheosis:socket.suffix": "",
-    "affix.apotheosis:durable": "",
-    "affix.apotheosis:durable.suffix": "",
+    "affix.apotheosis:durable": "耐用",
+    "affix.apotheosis:durable.suffix": "耐久",
 
     "affix.apotheosis.target.attack_self": "击中目标时，获得%s",
     "affix.apotheosis.target.attack_target": "击中目标时，造成%s",
@@ -393,10 +392,22 @@
     "item.apotheosis.epic_material": "玄奥沙",
     "item.apotheosis.mythic_material": "神铸珍珠",
     "item.apotheosis.ancient_material": "无限之体现",
+    "item.apotheosis.gem_fused_slate": "宝石融合板岩",
+
     "item.apotheosis.sigil_of_socketing": "镶孔符石",
-    "item.apotheosis.superior_sigil_of_socketing": "高级镶孔符石",
-    "item.apotheosis.sigil_of_enhancement": "[NYI]强化符石",
-    "item.apotheosis.superior_sigil_of_enhancement": "[NYI]高级强化符石",
+    "item.apotheosis.sigil_of_socketing.desc": "为物品增加一个镶孔",
+
+    "item.apotheosis.sigil_of_withdrawal": "摘除符石",
+    "item.apotheosis.sigil_of_withdrawal.desc": "移除物品上所有镶嵌的宝石",
+
+    "item.apotheosis.sigil_of_rebirth": "新生符石",
+    "item.apotheosis.sigil_of_rebirth.desc": "用于为重铸台提供燃料",
+
+    "item.apotheosis.sigil_of_enhancement": "强化符石",
+    "item.apotheosis.sigil_of_enhancement.desc": "用于为强化台提供燃料",
+
+    "item.apotheosis.sigil_of_unnaming": "除名符石",
+    "item.apotheosis.sigil_of_unnaming.desc": "从物品中移除词缀名称",
 
     "block.apotheosis.boss_spawner": "Boss刷怪笼",
     "block.apotheosis.gem_cutting_table": "宝石切割台",
@@ -405,14 +416,22 @@
     "block.apotheosis.salvaging_table.desc": "将词缀物品分解为珍宝材料",
     "block.apotheosis.simple_reforging_table": "简易重铸台",
     "block.apotheosis.reforging_table": "重铸台",
-    "block.apotheosis.reforging_table.desc": "使用宝石粉和珍宝材料来改变物品词缀",
+    "block.apotheosis.reforging_table.desc": "使用新生符石和珍宝材料来重铸物品",
     "block.apotheosis.reforging_table.desc2": "最高稀有度：%s",
+    "block.apotheosis.augmenting_table": "强化台",
+    "block.apotheosis.augmenting_table.desc": "使用强化符石来强化单个词缀",
 
     "button.apotheosis.salvage": "回收物品",
     "button.apotheosis.no_salvage": "没有放入物品",
     "button.apotheosis.no_salvage_all": "物品栏中没有可回收的物品",
     "button.apotheosis.upgrade": "升级宝石",
     "button.apotheosis.upgrade.no": "缺少输入材料",
+    "button.apotheosis.augmenting.upgrade": "升级选择的词缀",
+    "button.apotheosis.augmenting.reroll": "刷新选择的词缀",
+    "button.apotheosis.augmenting.no_selection": "没有选择词缀",
+    "button.apotheosis.augmenting.max_level": "已达到最高等级",
+    "button.apotheosis.augmenting.no_alternatives": "没有替代词缀",
+    "button.apotheosis.augmenting.upgrade.cost": "花费：%s个%s",
 
     "menu.apotheosis.gem_cutting": "宝石切割",
     "container.apotheosis.salvage": "回收",
@@ -429,6 +448,10 @@
     "text.apotheosis.no_upgrade": "已达到最高等级",
     "text.apotheosis.cut_cost": "宝石切割花费",
     "text.apotheosis.one_rarity_mat": "珍宝材料（任选其一）",
+    "text.apotheosis.potential_rerolls": "潜在刷新结果",
+    "text.apotheosis.upgraded_form": "升级结果",
+    "text.apotheosis.alternative_page": "第%s页，共%s页（滚动以翻页）",
+
     "title.apotheosis.smithing": "神化锻造",
     "title.apotheosis.salvaging": "回收",
 
