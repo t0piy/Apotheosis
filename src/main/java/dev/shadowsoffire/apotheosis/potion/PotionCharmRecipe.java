@@ -45,7 +45,7 @@ public class PotionCharmRecipe extends ShapedRecipe {
     private static Ingredient makePotionIngredient() {
         List<ItemStack> potionStacks = new ArrayList<>();
         for (Potion p : ForgeRegistries.POTIONS) {
-            if (p.getEffects().size() != 1 || p.getEffects().get(0).getEffect().isInstantenous()) continue;
+            if (!PotionCharmItem.isValidPotion(p)) continue;
             ItemStack potion = new ItemStack(Items.POTION);
             PotionUtils.setPotion(potion, p);
             potionStacks.add(potion);
@@ -84,7 +84,7 @@ public class PotionCharmRecipe extends ShapedRecipe {
     public boolean matches(CraftingContainer inv, Level world) {
         if (super.matches(inv, world)) {
             List<Potion> potions = this.potionSlots.intStream().mapToObj(s -> inv.getItem(s)).map(PotionUtils::getPotion).collect(Collectors.toList());
-            if (potions.size() > 0 && potions.stream().allMatch(p -> p != null && p.getEffects().size() == 1 && !p.getEffects().get(0).getEffect().isInstantenous())) {
+            if (potions.size() > 0 && potions.stream().allMatch(PotionCharmItem::isValidPotion)) {
                 return potions.stream().distinct().count() == 1;
             }
         }

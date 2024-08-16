@@ -47,7 +47,6 @@ public class PotionModule {
     public static final Logger LOG = LogManager.getLogger("Apotheosis : Potion");
     public static final ResourceLocation POTION_TEX = new ResourceLocation(Apotheosis.MODID, "textures/potions.png");
 
-    public static int knowledgeMult = 4;
     static boolean charmsInCuriosOnly = false;
 
     @SubscribeEvent
@@ -193,8 +192,6 @@ public class PotionModule {
     public void reload(ApotheosisReloadEvent e) {
         Configuration config = new Configuration(new File(Apotheosis.configDir, "potion.cfg"));
         config.setTitle("Apotheosis Potion Module Configuration");
-        knowledgeMult = config.getInt("Knowledge XP Multiplier", "general", knowledgeMult, 1, Integer.MAX_VALUE,
-            "The strength of Ancient Knowledge.  This multiplier determines how much additional xp is granted.\nServer-authoritative.");
         charmsInCuriosOnly = config.getBoolean("Restrict Charms to Curios", "general", charmsInCuriosOnly, "If Potion Charms will only work when in a curios slot, instead of in the inventory.");
 
         String[] defExt = { ForgeRegistries.MOB_EFFECTS.getKey(MobEffects.NIGHT_VISION).toString(), ForgeRegistries.MOB_EFFECTS.getKey(MobEffects.HEALTH_BOOST).toString() };
@@ -207,6 +204,18 @@ public class PotionModule {
             }
             catch (ResourceLocationException ex) {
                 LOG.error("Invalid extended potion charm entry {} will be ignored.", s);
+            }
+        }
+
+        String[] blacklist = config.getStringList("Blacklisted Potion Charm Effects", "general", new String[0],
+            "A list of effects that, cannot be crafted into Potion Charms.\nServer-authoritative.");
+        PotionCharmItem.BLACKLIST.clear();
+        for (String s : blacklist) {
+            try {
+                PotionCharmItem.BLACKLIST.add(new ResourceLocation(s));
+            }
+            catch (ResourceLocationException ex) {
+                LOG.error("Invalid blacklisted potion charm entry {} will be ignored.", s);
             }
         }
 

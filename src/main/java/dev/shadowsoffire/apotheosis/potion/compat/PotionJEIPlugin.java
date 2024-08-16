@@ -106,7 +106,7 @@ public class PotionJEIPlugin implements IModPlugin {
             else {
                 List<ItemStack> potionStacks = new ArrayList<>();
                 for (Potion p : ForgeRegistries.POTIONS) {
-                    if (p.getEffects().size() != 1 || p.getEffects().get(0).getEffect().isInstantenous()) continue;
+                    if (!PotionCharmItem.isValidPotion(p)) continue;
                     ItemStack charm = new ItemStack(Apoth.Items.POTION_CHARM.get());
                     PotionUtils.setPotion(charm, p);
                     potionStacks.add(charm);
@@ -134,7 +134,7 @@ public class PotionJEIPlugin implements IModPlugin {
                 List<ItemStack> potionStacks = new ArrayList<>();
                 List<ItemStack> unbreakable = new ArrayList<>();
                 for (Potion p : ForgeRegistries.POTIONS) {
-                    if (p.getEffects().size() != 1 || p.getEffects().get(0).getEffect().isInstantenous()) continue;
+                    if (!PotionCharmItem.isValidPotion(p)) continue;
                     ItemStack charm = new ItemStack(Apoth.Items.POTION_CHARM.get());
                     PotionUtils.setPotion(charm, p);
                     potionStacks.add(charm);

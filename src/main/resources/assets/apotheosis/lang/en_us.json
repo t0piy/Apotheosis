@@ -1181,6 +1181,7 @@
     "item.apotheosis.potion_charm.enabled": "Enabled",
     "item.apotheosis.potion_charm.disabled": "Disabled",
     "item.apotheosis.potion_charm.curios_only": "Only works in a Curios slot",
+    "misc.apotheosis.blacklisted_potion": "Cannot be converted into a Potion Charm.",
     
     "comment_id": "/Anvil Module",
     "info.apotheosis.anvil": "Can be enchanted.",

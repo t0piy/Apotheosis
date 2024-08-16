@@ -6,6 +6,7 @@ import java.util.Set;
 
 import dev.shadowsoffire.placebo.tabs.ITabFiller;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -36,6 +37,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class PotionCharmItem extends Item implements ITabFiller {
 
     public static final Set<ResourceLocation> EXTENDED_POTIONS = new HashSet<>();
+    public static final Set<ResourceLocation> BLACKLIST = new HashSet<>();
 
     public PotionCharmItem() {
         super(new Item.Properties().stacksTo(1).durability(192).setNoRepair());
@@ -158,7 +160,7 @@ public class PotionCharmItem extends Item implements ITabFiller {
     @Override
     public void fillItemCategory(CreativeModeTab group, CreativeModeTab.Output out) {
         for (Potion potion : ForgeRegistries.POTIONS) {
-            if (potion.getEffects().size() == 1 && !potion.getEffects().get(0).getEffect().isInstantenous()) {
+            if (isValidPotion(potion)) {
                 out.accept(PotionUtils.setPotion(new ItemStack(this), potion));
             }
         }
@@ -177,6 +179,28 @@ public class PotionCharmItem extends Item implements ITabFiller {
     @Override
     public int getEnchantmentValue() {
         return 0;
+    }
+
+    /**
+     * Checks if a potion may be converted into a potion charm.
+     * <p>
+     * By default, only single-effect potions that are not instantaneous are allowed.
+     * Additional potions may be blacklisted via config file.
+     * 
+     * @return True if the potion may be converted into a potion charm.
+     */
+    @SuppressWarnings("deprecation")
+    public static boolean isValidPotion(Potion potion) {
+        if (potion.getEffects().size() != 1) {
+            return false;
+        }
+
+        MobEffect effect = potion.getEffects().get(0).getEffect();
+        if (effect.isInstantenous()) {
+            return false;
+        }
+
+        return !BLACKLIST.contains(BuiltInRegistries.MOB_EFFECT.getKey(effect));
     }
 
 }
