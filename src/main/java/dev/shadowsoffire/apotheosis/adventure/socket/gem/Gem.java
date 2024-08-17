@@ -109,24 +109,21 @@ public class Gem implements CodecProvider<Gem>, ILuckyWeighted, IDimensional, Ra
      * @param tooltips The destination for tooltips.
      */
     public void addInformation(ItemStack gem, LootRarity rarity, Consumer<Component> list) {
-        if (this.isUnique()) list.accept(Component.translatable("text.apotheosis.unique").withStyle(Style.EMPTY.withColor(0xC73912)));
-        list.accept(CommonComponents.EMPTY);
+        if (this.isUnique()) {
+            list.accept(Component.translatable("text.apotheosis.unique").withStyle(Style.EMPTY.withColor(0xC73912)));
+            list.accept(CommonComponents.EMPTY);
+        }
         Style style = Style.EMPTY.withColor(0x0AFF0A);
         list.accept(Component.translatable("text.apotheosis.socketable_into").withStyle(style));
         addTypeInfo(list, this.bonusMap.keySet().toArray());
         list.accept(CommonComponents.EMPTY);
-        if (this.bonuses.size() == 1) {
-            list.accept(Component.translatable("item.modifiers.socket").withStyle(ChatFormatting.GOLD));
-            list.accept(this.bonuses.get(0).getSocketBonusTooltip(gem, rarity));
-        }
-        else {
-            list.accept(Component.translatable("item.modifiers.socket_in").withStyle(ChatFormatting.GOLD));
-            for (GemBonus bonus : this.bonuses) {
-                if (!bonus.supports(rarity)) continue;
-                Component modifComp = bonus.getSocketBonusTooltip(gem, rarity);
-                Component sum = Component.translatable("text.apotheosis.dot_prefix", Component.translatable("%s: %s", Component.translatable("gem_class." + bonus.getGemClass().key()), modifComp)).withStyle(ChatFormatting.GOLD);
-                list.accept(sum);
-            }
+
+        list.accept(Component.translatable("text.apotheosis.when_socketed_in").withStyle(ChatFormatting.GOLD));
+        for (GemBonus bonus : this.bonuses) {
+            if (!bonus.supports(rarity)) continue;
+            Component modifComp = bonus.getSocketBonusTooltip(gem, rarity);
+            Component sum = Component.translatable("text.apotheosis.dot_prefix", Component.translatable("%s: %s", Component.translatable("gem_class." + bonus.getGemClass().key()), modifComp)).withStyle(ChatFormatting.GOLD);
+            list.accept(sum);
         }
     }
 

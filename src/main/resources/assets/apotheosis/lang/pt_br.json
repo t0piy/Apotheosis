@@ -308,9 +308,9 @@
     "affix.apotheosis:socket.desc": "Encaixe (%s)",
 
 	"socket.apotheosis.empty": "Encaixe vazio",
-    "item.modifiers.socket": "Quando encaixado:",
-    "item.modifiers.socket_in": "Quando encaixado em:",
-    "item.modifiers.socket_typed": "Quando encaixado em %s:",
+    "text.apotheosis.when_socketed": "Quando encaixado:",
+    "text.apotheosis.when_socketed_in": "Quando encaixado em:",
+    "text.apotheosis.when_socketed_typed": "Quando encaixado em %s:",
 	"info.apotheosis.socketing": "Gemas podem ser encaixadas com uma bigorna. O item fica à esquerda e a gema à direita.\n\nEscolha com sabedoria, pois remover uma gema é caro.",
 
     "gem_class.melee_weapon": "Armas corpo a corpo",

@@ -660,9 +660,9 @@
 	"affix.apotheosis:socket.desc": "Гнёзда (%s)",
 
 	"socket.apotheosis.empty": "Пустое гнездо",
-    "item.modifiers.socket": "Когда вставлен:",
-    "item.modifiers.socket_in": "Когда вставлен в:",
-    "item.modifiers.socket_typed": "Когда вставлен в %s:",
+    "text.apotheosis.when_socketed": "Когда вставлен:",
+    "text.apotheosis.when_socketed_in": "Когда вставлен в:",
+    "text.apotheosis.when_socketed_typed": "Когда вставлен в %s:",
 	"info.apotheosis.socketing": "Самоцветы можно вставлять в гнёзда с помощью кузнечного стола. Предмет слева, самоцвет справа.\n\nВыбирайте с умом, так как удаление самоцвета в гнезде обходится дорого.",
 
 	"gem_class.melee_weapon": "Ближние оружия",

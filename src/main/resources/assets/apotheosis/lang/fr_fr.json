@@ -308,9 +308,9 @@
     "affix.apotheosis:socket.desc": "Emplacement (%s)",
 
     "socket.apotheosis.empty": "Emplacement Vide",
-    "item.modifiers.socket": "Lorsqu'Emboîté:",
-    "item.modifiers.socket_in": "Lorsqu'Emboîté dans:",
-    "item.modifiers.socket_typed": "Lorsqu'Emboîté dans %s:",
+    "text.apotheosis.when_socketed": "Lorsqu'Emboîté:",
+    "text.apotheosis.when_socketed_in": "Lorsqu'Emboîté dans:",
+    "text.apotheosis.when_socketed_typed": "Lorsqu'Emboîté dans %s:",
     "info.apotheosis.socketing": "Les gemmes peuvent être emboîtées avec une table de forgeron. Objet à gauche, gemme à droite.\n\nChoisissez judicieusement, car retirer une gemme emboîtée est coûteux.",
 
     "gem_class.melee_weapon": "Armes de Mêlée",

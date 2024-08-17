@@ -307,9 +307,9 @@
     "affix.apotheosis:socket.desc": "已开镶孔（%s）",
 
     "socket.apotheosis.empty": "空镶孔",
-    "item.modifiers.socket": "镶嵌时：",
-    "item.modifiers.socket_in": "镶嵌时：",
-    "item.modifiers.socket_typed": "镶嵌在%s时：",
+    "text.apotheosis.when_socketed": "镶嵌时：",
+    "text.apotheosis.when_socketed_in": "镶嵌时：",
+    "text.apotheosis.when_socketed_typed": "镶嵌在%s时：",
     "info.apotheosis.socketing": "使用锻造台来镶嵌宝石。物品放在左侧，宝石放在右侧。\n\n选择时要慎重，因为取出已镶嵌的宝石会付出很大的代价。",
 
     "gem_class.melee_weapon": "近战武器",
