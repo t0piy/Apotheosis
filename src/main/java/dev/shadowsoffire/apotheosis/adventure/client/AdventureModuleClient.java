@@ -158,13 +158,15 @@ public class AdventureModuleClient {
 
         @SubscribeEvent
         public static void client(FMLClientSetupEvent e) {
-            e.enqueueWork(() -> {
-                ItemProperties.register(Adventure.Items.GEM.get(), Apotheosis.loc("rarity"), (stack, level, entity, tint) -> {
-                    DynamicHolder<Gem> gem = GemItem.getGem(stack);
-                    DynamicHolder<LootRarity> rarity = AffixHelper.getRarity(stack);
-                    return gem.isBound() && rarity.isBound() ? rarity.get().ordinal() : Float.NEGATIVE_INFINITY;
+            if (Apotheosis.enableAdventure) {
+                e.enqueueWork(() -> {
+                    ItemProperties.register(Adventure.Items.GEM.get(), Apotheosis.loc("rarity"), (stack, level, entity, tint) -> {
+                        DynamicHolder<Gem> gem = GemItem.getGem(stack);
+                        DynamicHolder<LootRarity> rarity = AffixHelper.getRarity(stack);
+                        return gem.isBound() && rarity.isBound() ? rarity.get().ordinal() : Float.NEGATIVE_INFINITY;
+                    });
                 });
-            });
+            }
         }
     }
 
