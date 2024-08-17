@@ -29,7 +29,7 @@ public class GardenModule {
     public void setup(FMLCommonSetupEvent e) {
         this.reload(null);
         Apotheosis.HELPER.registerProvider(factory -> {
-            factory.addShapeless(Apoth.Items.ENDER_LEAD, Items.ENDER_PEARL, Items.LEAD, Items.GOLD_INGOT);
+            factory.addShapeless(Apoth.Items.ENDER_LEAD, "forge:ender_pearls", Items.LEAD, Items.GOLD_INGOT);
         });
         MinecraftForge.EVENT_BUS.addListener(this::reload);
     }
