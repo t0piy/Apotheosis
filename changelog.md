@@ -1,3 +1,10 @@
+## 7.4.2
+* Fixed the game crashing when the Adventure Module was disabled.
+* Made a slight change to gem tooltips. In the future, the "Fits In" section may be removed.
+* Quarkrus: Updated Russian translation.
+* Made recipes using ender pearls use the `forge:ender_pearls` tag instead of the specific item.
+* Gave `GemLootPoolEntry` the same rarity clamp semantics as `AffixLootPoolEntry`.
+
 ## 7.4.1
 * mc-kaishixiaxue: Updated Chinese translation.
 * Quarkrus: Updated Russian translation.
