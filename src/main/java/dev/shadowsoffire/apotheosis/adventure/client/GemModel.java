@@ -5,8 +5,8 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import dev.shadowsoffire.apotheosis.Apotheosis;
-import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.Gem;
-import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.GemItem;
+import dev.shadowsoffire.apotheosis.adventure.socket.gem.Gem;
+import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemItem;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -33,7 +33,8 @@ public class GemModel implements BakedModel {
         this.overrides = new ItemOverrides(){
             @Override
             public BakedModel resolve(BakedModel original, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
-                return GemModel.this.resolve(original, stack, world, entity, seed);
+                BakedModel specific = GemModel.this.resolve(original, stack, world, entity, seed);
+                return specific == original ? specific : specific.getOverrides().resolve(specific, stack, world, entity, seed);
             }
         };
     }

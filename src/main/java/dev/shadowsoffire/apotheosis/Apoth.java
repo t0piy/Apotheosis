@@ -1,6 +1,7 @@
 package dev.shadowsoffire.apotheosis;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixRegistry;
+import dev.shadowsoffire.apotheosis.adventure.affix.augmenting.AugmentingTableTile;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.FestiveAffix;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.MagicalArrowAffix;
@@ -11,7 +12,6 @@ import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingRecipe;
 import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingTableTile;
 import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvagingRecipe;
 import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvagingTableTile;
-import dev.shadowsoffire.apotheosis.adventure.affix.socket.SocketAffix;
 import dev.shadowsoffire.apotheosis.adventure.boss.BossSpawnerBlock.BossSpawnerTile;
 import dev.shadowsoffire.apotheosis.ench.anvil.AnvilTile;
 import dev.shadowsoffire.apotheosis.ench.library.EnchLibraryContainer;
@@ -39,6 +39,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
@@ -47,6 +48,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -129,11 +131,11 @@ public class Apoth {
         public static final RegistryObject<BlockEntityType<BossSpawnerTile>> BOSS_SPAWNER = R.blockEntity("BOSS_SPAWNER");
         public static final RegistryObject<BlockEntityType<ReforgingTableTile>> REFORGING_TABLE = R.blockEntity("REFORGING_TABLE");
         public static final RegistryObject<BlockEntityType<SalvagingTableTile>> SALVAGING_TABLE = R.blockEntity("SALVAGING_TABLE");
+        public static final RegistryObject<BlockEntityType<AugmentingTableTile>> AUGMENTING_TABLE = R.blockEntity("augmenting_table");
     }
 
     public static final class Affixes {
         // Implicit affixes
-        public static final DynamicHolder<SocketAffix> SOCKET = AffixRegistry.INSTANCE.holder(Apotheosis.loc("socket"));
         public static final DynamicHolder<DurableAffix> DURABLE = AffixRegistry.INSTANCE.holder(Apotheosis.loc("durable"));
         // Real affixes
         public static final DynamicHolder<MagicalArrowAffix> MAGICAL = AffixRegistry.INSTANCE.holder(Apotheosis.loc("ranged/special/magical"));
@@ -146,6 +148,7 @@ public class Apoth {
     public static final class Tags {
         public static final TagKey<Item> BOON_DROPS = ItemTags.create(new ResourceLocation(Apotheosis.MODID, "boon_drops"));
         public static final TagKey<Item> SPEARFISHING_DROPS = ItemTags.create(new ResourceLocation(Apotheosis.MODID, "spearfishing_drops"));
+        public static final TagKey<Block> ROGUE_SPAWNER_COVERS = BlockTags.create(new ResourceLocation(Apotheosis.MODID, "rogue_spawner_covers"));
     }
 
     public static final class RecipeTypes {

@@ -119,6 +119,7 @@ public class EnchModule {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("deprecation")
     public void init(FMLCommonSetupEvent e) {
         this.reload(null);
 
@@ -126,20 +127,20 @@ public class EnchModule {
             Ingredient pot = Apotheosis.potionIngredient(Potions.REGENERATION);
             factory.addShaped(Ench.Blocks.HELLSHELF.get(), 3, 3, Blocks.NETHER_BRICKS, Blocks.NETHER_BRICKS, Blocks.NETHER_BRICKS, Items.BLAZE_ROD, "forge:bookshelves", pot, Blocks.NETHER_BRICKS, Blocks.NETHER_BRICKS,
                 Blocks.NETHER_BRICKS);
-            factory.addShaped(dev.shadowsoffire.apotheosis.ench.Ench.Items.PRISMATIC_WEB, 3, 3, null, Items.PRISMARINE_SHARD, null, Items.PRISMARINE_SHARD, Blocks.COBWEB, Items.PRISMARINE_SHARD, null, Items.PRISMARINE_SHARD, null);
+            factory.addShaped(Ench.Items.PRISMATIC_WEB, 3, 3, null, Items.PRISMARINE_SHARD, null, Items.PRISMARINE_SHARD, Blocks.COBWEB, Items.PRISMARINE_SHARD, null, Items.PRISMARINE_SHARD, null);
             ItemStack book = new ItemStack(Items.BOOK);
             ItemStack stick = new ItemStack(Items.STICK);
             ItemStack blaze = new ItemStack(Items.BLAZE_ROD);
-            factory.addShaped(new ItemStack(dev.shadowsoffire.apotheosis.ench.Ench.Items.HELMET_TOME.get(), 5), 3, 2, book, book, book, book, blaze, book);
-            factory.addShaped(new ItemStack(dev.shadowsoffire.apotheosis.ench.Ench.Items.CHESTPLATE_TOME.get(), 8), 3, 3, book, blaze, book, book, book, book, book, book, book);
-            factory.addShaped(new ItemStack(dev.shadowsoffire.apotheosis.ench.Ench.Items.LEGGINGS_TOME.get(), 7), 3, 3, book, null, book, book, blaze, book, book, book, book);
-            factory.addShaped(new ItemStack(dev.shadowsoffire.apotheosis.ench.Ench.Items.BOOTS_TOME.get(), 4), 3, 2, book, null, book, book, blaze, book);
-            factory.addShaped(new ItemStack(dev.shadowsoffire.apotheosis.ench.Ench.Items.WEAPON_TOME.get(), 2), 1, 3, book, book, new ItemStack(Items.BLAZE_POWDER));
-            factory.addShaped(new ItemStack(dev.shadowsoffire.apotheosis.ench.Ench.Items.PICKAXE_TOME.get(), 3), 3, 3, book, book, book, null, blaze, null, null, stick, null);
-            factory.addShaped(new ItemStack(dev.shadowsoffire.apotheosis.ench.Ench.Items.FISHING_TOME.get(), 2), 3, 3, null, null, blaze, null, stick, book, stick, null, book);
-            factory.addShaped(new ItemStack(dev.shadowsoffire.apotheosis.ench.Ench.Items.BOW_TOME.get(), 3), 3, 3, null, stick, book, blaze, null, book, null, stick, book);
-            factory.addShapeless(new ItemStack(dev.shadowsoffire.apotheosis.ench.Ench.Items.OTHER_TOME.get(), 6), book, book, book, book, book, book, blaze);
-            factory.addShaped(new ItemStack(dev.shadowsoffire.apotheosis.ench.Ench.Items.SCRAP_TOME.get(), 8), 3, 3, book, book, book, book, Blocks.ANVIL, book, book, book, book);
+            factory.addShaped(new ItemStack(Ench.Items.HELMET_TOME.get(), 5), 3, 2, book, book, book, book, blaze, book);
+            factory.addShaped(new ItemStack(Ench.Items.CHESTPLATE_TOME.get(), 8), 3, 3, book, blaze, book, book, book, book, book, book, book);
+            factory.addShaped(new ItemStack(Ench.Items.LEGGINGS_TOME.get(), 7), 3, 3, book, null, book, book, blaze, book, book, book, book);
+            factory.addShaped(new ItemStack(Ench.Items.BOOTS_TOME.get(), 4), 3, 2, book, null, book, book, blaze, book);
+            factory.addShaped(new ItemStack(Ench.Items.WEAPON_TOME.get(), 2), 1, 3, book, book, new ItemStack(Items.BLAZE_POWDER));
+            factory.addShaped(new ItemStack(Ench.Items.PICKAXE_TOME.get(), 3), 3, 3, book, book, book, null, blaze, null, null, stick, null);
+            factory.addShaped(new ItemStack(Ench.Items.FISHING_TOME.get(), 2), 3, 3, null, null, blaze, null, stick, book, stick, null, book);
+            factory.addShaped(new ItemStack(Ench.Items.BOW_TOME.get(), 3), 3, 3, null, stick, book, blaze, null, book, null, stick, book);
+            factory.addShapeless(new ItemStack(Ench.Items.OTHER_TOME.get(), 6), book, book, book, book, book, book, blaze);
+            factory.addShaped(new ItemStack(Ench.Items.SCRAP_TOME.get(), 8), 3, 3, book, book, book, book, Blocks.ANVIL, book, book, book, book);
             Ingredient maxHellshelf = Ingredient.of(Ench.Blocks.INFUSED_HELLSHELF.get());
             factory.addShaped(Ench.Blocks.BLAZING_HELLSHELF.get(), 3, 3, null, Items.FIRE_CHARGE, null, Items.FIRE_CHARGE, maxHellshelf, Items.FIRE_CHARGE, Items.BLAZE_POWDER, Items.BLAZE_POWDER, Items.BLAZE_POWDER);
             factory.addShaped(Ench.Blocks.GLOWING_HELLSHELF.get(), 3, 3, null, Blocks.GLOWSTONE, null, null, maxHellshelf, null, Blocks.GLOWSTONE, null, Blocks.GLOWSTONE);
@@ -149,8 +150,9 @@ public class EnchModule {
             factory.addShaped(Ench.Blocks.CRYSTAL_SEASHELF.get(), 3, 3, null, Items.PRISMARINE_CRYSTALS, null, null, maxSeashelf, null, Items.PRISMARINE_CRYSTALS, null, Items.PRISMARINE_CRYSTALS);
             factory.addShaped(Ench.Blocks.HEART_SEASHELF.get(), 3, 3, null, Items.HEART_OF_THE_SEA, null, Items.PRISMARINE_SHARD, maxSeashelf, Items.PRISMARINE_SHARD, Items.PRISMARINE_SHARD, Items.PRISMARINE_SHARD,
                 Items.PRISMARINE_SHARD);
-            factory.addShaped(Ench.Blocks.PEARL_ENDSHELF.get(), 3, 3, Items.END_ROD, null, Items.END_ROD, Items.ENDER_PEARL, Ench.Blocks.ENDSHELF.get(), Items.ENDER_PEARL, Items.END_ROD, null, Items.END_ROD);
-            factory.addShaped(Ench.Blocks.DRACONIC_ENDSHELF.get(), 3, 3, null, Items.DRAGON_HEAD, null, Items.ENDER_PEARL, Ench.Blocks.ENDSHELF.get(), Items.ENDER_PEARL, Items.ENDER_PEARL, Items.ENDER_PEARL, Items.ENDER_PEARL);
+            factory.addShaped(Ench.Blocks.PEARL_ENDSHELF.get(), 3, 3, Items.END_ROD, null, Items.END_ROD, "forge:ender_pearls", Ench.Blocks.ENDSHELF.get(), "forge:ender_pearls", Items.END_ROD, null, Items.END_ROD);
+            factory.addShaped(Ench.Blocks.DRACONIC_ENDSHELF.get(), 3, 3, null, Items.DRAGON_HEAD, null, "forge:ender_pearls", Ench.Blocks.ENDSHELF.get(), "forge:ender_pearls", "forge:ender_pearls", "forge:ender_pearls",
+                "forge:ender_pearls");
             factory.addShaped(Ench.Blocks.BEESHELF.get(), 3, 3, Items.HONEYCOMB, Items.BEEHIVE, Items.HONEYCOMB, Items.HONEY_BLOCK, "forge:bookshelves", Items.HONEY_BLOCK, Items.HONEYCOMB, Items.BEEHIVE, Items.HONEYCOMB);
             factory.addShaped(Ench.Blocks.MELONSHELF.get(), 3, 3, Items.MELON, Items.MELON, Items.MELON, Items.GLISTERING_MELON_SLICE, "forge:bookshelves", Items.GLISTERING_MELON_SLICE, Items.MELON, Items.MELON, Items.MELON);
         });

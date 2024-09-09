@@ -8,10 +8,11 @@
     
     "death.attack.apotheosis.execute": "%s was executed by %s",
     "death.attack.apotheosis.execute.item": "%s was executed by %s using %s",
-    
+
     "misc.apotheosis.affix_name.two": "%s %s",
     "misc.apotheosis.affix_name.three": "%s %s %s",
     "misc.apotheosis.affix_name.four": "%s %s %s %s",
+    "misc.apotheosis.affix_bounds": "[%s\u00A0-\u00A0%s]",
 
     "misc.apotheosis.radial_state_updated": "Radial mining mode updated to \"%s\"",
     "misc.apotheosis.radial_state.require_not_sneaking": "Disabled While Sneaking",
@@ -287,10 +288,8 @@
     "affix.apotheosis:armor/mob_effect/bursting": "Bursting",
     "affix.apotheosis:armor/mob_effect/bursting.suffix": "of Vitality",
 
-    "affix.apotheosis:socket": "",
-    "affix.apotheosis:socket.suffix": "",
-    "affix.apotheosis:durable": "",
-    "affix.apotheosis:durable.suffix": "",
+    "affix.apotheosis:durable": "Durable",
+    "affix.apotheosis:durable.suffix": "of Durability",
 
     "affix.apotheosis.target.attack_self": "On hit, gain %s",
     "affix.apotheosis.target.attack_target": "On hit, inflict %s",
@@ -308,9 +307,9 @@
     "affix.apotheosis:socket.desc": "Socketed (%s)",
 
     "socket.apotheosis.empty": "Empty Socket",
-    "item.modifiers.socket": "When Socketed:",
-    "item.modifiers.socket_in": "When Socketed in:",
-    "item.modifiers.socket_typed": "When Socketed in %s:",
+    "text.apotheosis.when_socketed": "When Socketed:",
+    "text.apotheosis.when_socketed_in": "When Socketed in:",
+    "text.apotheosis.when_socketed_typed": "When Socketed in %s:",
     "info.apotheosis.socketing": "Gems can be socketed with a Smithing Table. Item on the left, gem on the right.\n\nChoose wisely, as removing a socketed gem is costly.",
 
     "gem_class.melee_weapon": "Melee Weapons",
@@ -331,6 +330,7 @@
     "gem_class.boots": "Boots",
     "gem_class.shield": "Shields",
     "gem_class.heavy_weapon": "Heavy Weapons",
+    "gem_class.anything": "Anything",
 
     "bonus.apotheosis:durability.desc": "Ignores %s%% of durability damage",
     "bonus.apotheosis:enchantment.desc": "+%s %s to %s",
@@ -393,10 +393,22 @@
     "item.apotheosis.epic_material": "Arcane Sands",
     "item.apotheosis.mythic_material": "Godforged Pearl",
     "item.apotheosis.ancient_material": "Manifestation of Infinity",
+    "item.apotheosis.gem_fused_slate": "Gem-Fused Slate",
+
     "item.apotheosis.sigil_of_socketing": "Sigil of Socketing",
-    "item.apotheosis.superior_sigil_of_socketing": "Superior Sigil of Socketing",
-    "item.apotheosis.sigil_of_enhancement": "[NYI] Sigil of Enhancement",
-    "item.apotheosis.superior_sigil_of_enhancement": "[NYI] Superior Sigil of Enhancement",
+    "item.apotheosis.sigil_of_socketing.desc": "Adds one socket to an item",
+
+    "item.apotheosis.sigil_of_withdrawal": "Sigil of Withdrawal",
+    "item.apotheosis.sigil_of_withdrawal.desc": "Removes all socketed gems from an item",
+
+    "item.apotheosis.sigil_of_rebirth": "Sigil of Rebirth",
+    "item.apotheosis.sigil_of_rebirth.desc": "Used to fuel the Reforging Table",
+
+    "item.apotheosis.sigil_of_enhancement": "Sigil of Enhancement",
+    "item.apotheosis.sigil_of_enhancement.desc": "Used to fuel the Augmentation Table",
+
+    "item.apotheosis.sigil_of_unnaming": "Sigil of Unnaming",
+    "item.apotheosis.sigil_of_unnaming.desc": "Removes the affixed name from an item",
 
     "block.apotheosis.boss_spawner": "Boss Spawner",
     "block.apotheosis.gem_cutting_table": "Gem Cutting Table",
@@ -405,14 +417,22 @@
     "block.apotheosis.salvaging_table.desc": "Breaks down Affix Items into Rarity Materials",
     "block.apotheosis.simple_reforging_table": "Simple Reforging Table",
     "block.apotheosis.reforging_table": "Reforging Table",
-    "block.apotheosis.reforging_table.desc": "Uses Gem Dust and Rarity Materials to reroll affixes",
+    "block.apotheosis.reforging_table.desc": "Uses Sigils of Rebirth and Rarity Materials to reforge items",
     "block.apotheosis.reforging_table.desc2": "Max Rarity: %s",
+    "block.apotheosis.augmenting_table": "Augmenting Table",
+    "block.apotheosis.augmenting_table.desc": "Uses Sigils of Enhancement to augment individual affixes",
 
     "button.apotheosis.salvage": "Salvage Items",
     "button.apotheosis.no_salvage": "No items selected",
     "button.apotheosis.no_salvage_all": "No valid items in inventory",
     "button.apotheosis.upgrade": "Upgrade Gem",
     "button.apotheosis.upgrade.no": "Missing Inputs",
+    "button.apotheosis.augmenting.upgrade": "Upgrade Selected Affix",
+    "button.apotheosis.augmenting.reroll": "Reroll Selected Affix",
+    "button.apotheosis.augmenting.no_selection": "No Affix Selected",
+    "button.apotheosis.augmenting.max_level": "Already Max Level",
+    "button.apotheosis.augmenting.no_alternatives": "No Alternative Affixes",
+    "button.apotheosis.augmenting.upgrade.cost": "Cost: %sx %s",
 
     "menu.apotheosis.gem_cutting": "Gem Cutting",
     "container.apotheosis.salvage": "Salvage",
@@ -429,6 +449,10 @@
     "text.apotheosis.no_upgrade": "Max Upgrade Reached",
     "text.apotheosis.cut_cost": "Gem Cutting Cost",
     "text.apotheosis.one_rarity_mat": "Rarity Materials (1)",
+    "text.apotheosis.potential_rerolls": "Potential Rerolls",
+    "text.apotheosis.upgraded_form": "Upgraded Form",
+    "text.apotheosis.alternative_page": "Page %s/%s (scroll to change)",
+
     "title.apotheosis.smithing": "Apothic Smithing",
     "title.apotheosis.salvaging": "Salvaging",
 
@@ -1158,6 +1182,7 @@
     "item.apotheosis.potion_charm.enabled": "Enabled",
     "item.apotheosis.potion_charm.disabled": "Disabled",
     "item.apotheosis.potion_charm.curios_only": "Only works in a Curios slot",
+    "misc.apotheosis.blacklisted_potion": "Cannot be converted into a Potion Charm.",
     
     "comment_id": "/Anvil Module",
     "info.apotheosis.anvil": "Can be enchanted.",
@@ -1181,13 +1206,17 @@
     "name.apotheosis.vigilance": "Eternal Vigilance",
     "apotheosis.recipes.fletching": "Fletching",
     "item.apotheosis.obsidian_arrow": "Obsidian Arrow",
+    "entity.apotheosis.obsidian_arrow": "Obsidian Arrow",
     "info.apotheosis.obsidian_arrow": "+20%% Damage",
     "item.apotheosis.broadhead_arrow": "Broadhead Arrow",
+    "entity.apotheosis.broadhead_arrow": "Broadhead Arrow",
     "info.apotheosis.broadhead_arrow": "Bleeding (0:15)",
     "item.apotheosis.explosive_arrow": "Explosive Arrow",
+    "entity.apotheosis.explosive_arrow": "Explosive Arrow",
     "info.apotheosis.explosive_arrow": "Explosion Radius: 2",
     "item.apotheosis.iron_mining_arrow": "Iron Mining Arrow",
     "item.apotheosis.diamond_mining_arrow": "Diamond Mining Arrow",
+    "entity.apotheosis.mining_arrow": "Mining Arrow",
     "info.apotheosis.mining_arrow.iron": "Breaks blocks like an iron pickaxe",
     "info.apotheosis.mining_arrow.diamond": "Breaks blocks like a diamond pickaxe",
     

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import dev.shadowsoffire.placebo.tabs.ITabFiller;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -36,6 +37,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class PotionCharmItem extends Item implements ITabFiller {
 
     public static final Set<ResourceLocation> EXTENDED_POTIONS = new HashSet<>();
+    public static final Set<ResourceLocation> BLACKLIST = new HashSet<>();
 
     public PotionCharmItem() {
         super(new Item.Properties().stacksTo(1).durability(192).setNoRepair());
@@ -48,11 +50,10 @@ public class PotionCharmItem extends Item implements ITabFiller {
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean isSelected) {
-        if (!hasPotion(stack)) return;
+        if (!hasEffect(stack)) return;
         if (PotionModule.charmsInCuriosOnly && slot != -1) return;
         if (stack.getOrCreateTag().getBoolean("charm_enabled") && entity instanceof ServerPlayer) {
-            Potion p = PotionUtils.getPotion(stack);
-            MobEffectInstance contained = p.getEffects().get(0);
+            MobEffectInstance contained = getEffect(stack);
             MobEffectInstance active = ((ServerPlayer) entity).getEffect(contained.getEffect());
             if (active == null || active.getDuration() < getCriticalDuration(active.getEffect())) {
                 int durationOffset = getCriticalDuration(contained.getEffect());
@@ -99,9 +100,8 @@ public class PotionCharmItem extends Item implements ITabFiller {
         if (PotionModule.charmsInCuriosOnly) {
             tooltip.add(Component.translatable(this.getDescriptionId() + ".curios_only").withStyle(ChatFormatting.RED));
         }
-        if (hasPotion(stack)) {
-            Potion p = PotionUtils.getPotion(stack);
-            MobEffectInstance effect = p.getEffects().get(0);
+        if (hasEffect(stack)) {
+            MobEffectInstance effect = getEffect(stack);
             MutableComponent potionCmp = Component.translatable(effect.getDescriptionId());
             if (effect.getAmplifier() > 0) {
                 potionCmp = Component.translatable("potion.withAmplifier", potionCmp, Component.translatable("potion.potency." + effect.getAmplifier()));
@@ -121,15 +121,14 @@ public class PotionCharmItem extends Item implements ITabFiller {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        if (!hasPotion(stack)) return 1;
+        if (!hasEffect(stack)) return 1;
         return 192;
     }
 
     @Override
     public Component getName(ItemStack stack) {
-        if (!hasPotion(stack)) return Component.translatable("item.apotheosis.potion_charm_broke");
-        Potion p = PotionUtils.getPotion(stack);
-        MobEffectInstance effect = p.getEffects().get(0);
+        if (!hasEffect(stack)) return Component.translatable("item.apotheosis.potion_charm_broke");
+        MobEffectInstance effect = getEffect(stack);
         MutableComponent potionCmp = Component.translatable(effect.getDescriptionId());
         if (effect.getAmplifier() > 0) {
             potionCmp = Component.translatable("potion.withAmplifier", potionCmp, Component.translatable("potion.potency." + effect.getAmplifier()));
@@ -137,14 +136,31 @@ public class PotionCharmItem extends Item implements ITabFiller {
         return Component.translatable("item.apotheosis.potion_charm", potionCmp);
     }
 
-    public static boolean hasPotion(ItemStack stack) {
-        return PotionUtils.getPotion(stack) != Potions.EMPTY;
+    /**
+     * Returns true if the charm's NBT data contains a valid mob effect instance.
+     * <p>
+     * This will check the encoded potion type and then fall back to encoded custom NBT effects.
+     */
+    public static boolean hasEffect(ItemStack stack) {
+        List<MobEffectInstance> effects = PotionUtils.getMobEffects(stack);
+        return !effects.isEmpty();
+    }
+
+    /**
+     * Returns the mob effect instance stored in the charm's NBT data.
+     * <p>
+     * This will check the encoded potion type and then fall back to encoded custom NBT effects.
+     * <p>
+     * Only a single effect is permitted, even when using custom NBT.
+     */
+    public static MobEffectInstance getEffect(ItemStack stack) {
+        return PotionUtils.getMobEffects(stack).get(0);
     }
 
     @Override
     public void fillItemCategory(CreativeModeTab group, CreativeModeTab.Output out) {
         for (Potion potion : ForgeRegistries.POTIONS) {
-            if (potion.getEffects().size() == 1 && !potion.getEffects().get(0).getEffect().isInstantenous()) {
+            if (isValidPotion(potion)) {
                 out.accept(PotionUtils.setPotion(new ItemStack(this), potion));
             }
         }
@@ -163,6 +179,28 @@ public class PotionCharmItem extends Item implements ITabFiller {
     @Override
     public int getEnchantmentValue() {
         return 0;
+    }
+
+    /**
+     * Checks if a potion may be converted into a potion charm.
+     * <p>
+     * By default, only single-effect potions that are not instantaneous are allowed.
+     * Additional potions may be blacklisted via config file.
+     * 
+     * @return True if the potion may be converted into a potion charm.
+     */
+    @SuppressWarnings("deprecation")
+    public static boolean isValidPotion(Potion potion) {
+        if (potion.getEffects().size() != 1) {
+            return false;
+        }
+
+        MobEffect effect = potion.getEffects().get(0).getEffect();
+        if (effect.isInstantenous()) {
+            return false;
+        }
+
+        return !BLACKLIST.contains(BuiltInRegistries.MOB_EFFECT.getKey(effect));
     }
 
 }

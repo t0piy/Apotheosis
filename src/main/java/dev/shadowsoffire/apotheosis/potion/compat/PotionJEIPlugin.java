@@ -106,7 +106,7 @@ public class PotionJEIPlugin implements IModPlugin {
             else {
                 List<ItemStack> potionStacks = new ArrayList<>();
                 for (Potion p : ForgeRegistries.POTIONS) {
-                    if (p.getEffects().size() != 1 || p.getEffects().get(0).getEffect().isInstantenous()) continue;
+                    if (!PotionCharmItem.isValidPotion(p)) continue;
                     ItemStack charm = new ItemStack(Apoth.Items.POTION_CHARM.get());
                     PotionUtils.setPotion(charm, p);
                     potionStacks.add(charm);
@@ -121,11 +121,11 @@ public class PotionJEIPlugin implements IModPlugin {
 
         @Override
         public void setRecipe(IRecipeLayoutBuilder builder, IRecipeSlotBuilder input, IRecipeSlotBuilder output, EnchantingRecipe recipe, IFocusGroup focuses) {
-            Potion potion = PotionUtils.getPotion(focuses.getFocuses(VanillaTypes.ITEM_STACK).findFirst().map(IFocus::getTypedValue).map(ITypedIngredient::getIngredient).orElse(ItemStack.EMPTY));
-            if (potion != Potions.EMPTY) {
-                ItemStack out = new ItemStack(Apoth.Items.POTION_CHARM.get());
-                PotionUtils.setPotion(out, potion);
-                ItemStack in = out.copy();
+            ItemStack stack = focuses.getFocuses(VanillaTypes.ITEM_STACK).findFirst().map(IFocus::getTypedValue).map(ITypedIngredient::getIngredient).orElse(ItemStack.EMPTY);
+            if (PotionCharmItem.hasEffect(stack)) {
+                ItemStack in = stack.copy();
+                in.getOrCreateTag().putBoolean("Unbreakable", false);
+                ItemStack out = stack.copy();
                 out.getOrCreateTag().putBoolean("Unbreakable", true);
                 input.addIngredient(VanillaTypes.ITEM_STACK, in);
                 output.addIngredient(VanillaTypes.ITEM_STACK, out);
@@ -134,7 +134,7 @@ public class PotionJEIPlugin implements IModPlugin {
                 List<ItemStack> potionStacks = new ArrayList<>();
                 List<ItemStack> unbreakable = new ArrayList<>();
                 for (Potion p : ForgeRegistries.POTIONS) {
-                    if (p.getEffects().size() != 1 || p.getEffects().get(0).getEffect().isInstantenous()) continue;
+                    if (!PotionCharmItem.isValidPotion(p)) continue;
                     ItemStack charm = new ItemStack(Apoth.Items.POTION_CHARM.get());
                     PotionUtils.setPotion(charm, p);
                     potionStacks.add(charm);
@@ -155,9 +155,8 @@ public class PotionJEIPlugin implements IModPlugin {
         @Override
         public String apply(ItemStack stack, UidContext context) {
             if (context != UidContext.Recipe) {
-                if (!PotionCharmItem.hasPotion(stack)) return NONE;
-                Potion p = PotionUtils.getPotion(stack);
-                MobEffectInstance contained = p.getEffects().get(0);
+                if (!PotionCharmItem.hasEffect(stack)) return NONE;
+                MobEffectInstance contained = PotionCharmItem.getEffect(stack);
                 return ForgeRegistries.MOB_EFFECTS.getKey(contained.getEffect()) + "@" + contained.getAmplifier() + "@" + contained.getDuration();
             }
             return NONE;
