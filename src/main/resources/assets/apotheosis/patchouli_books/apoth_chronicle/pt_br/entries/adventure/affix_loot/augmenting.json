@@ -1,0 +1,39 @@
+{
+    "name": "Aprimoramento",
+    "icon": "apotheosis:augmenting_table",
+    "category": "apotheosis:adventure/affix_loot",
+    "flag": "apotheosis:adventure",
+    "sortnum": 5,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "A $(9)bancada de aprimoramento$() é uma bancada de construção de fim de jogo usada para aumentar os afixos individuais de um item.$(p)Por meio dela, você pode atualizar ou rerrolar os afixos individuais, deixando o resto intacto."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "apotheosis:augmenting_table",
+            "text": "Criar uma bancada de aprimoramento requer focar a energia de uma $(9)estrela do nether$() através de duas $(9)pérolas forjadas por deuses$(), usando uma $(9)bancada de encantamentos$() como base."
+        },
+        {
+            "type": "patchouli:text",
+            "title": "Encaixes de entrada",
+            "text": "A bancada de aprimoramento possui dois encaixes de entrada.$(p)O encaixe superior contém o item que você deseja aprimorar, que deve ser um item com afixo.$(p)Normalmente, você deve aprimorar apenas itens de raridade pelo menos $(#ED7014)mítica$(), embora também possa considerar aprimorar itens $(#BB00BB)épicos$()."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "apotheosis:sigil_of_enhancement",
+            "title": "Encaixes de entrada",
+            "text": "O encaixe inferior contém $(9)amuletos de aprimoramento$(), o item combustível usado para aprimorar.$(p)Por fim, você precisará selecionar o afixo desejado no menu."
+        },
+        {
+            "type": "patchouli:text",
+            "title": "Aprimorando",
+            "text": "A primeira operação que pode ser realizada na bancada de aprimoramento é aumentar um afixo.$(p)Isso custa dois $(9)amuletos de aprimoramento$() e aumentará a força interna do afixo atual em 25%.$(p)O quanto essa melhoria oferece varia de acordo com o afixo."
+        },
+        {
+            "type": "patchouli:text",
+            "title": "Rerrolando",
+            "text": "A segunda operação da bancada de aprimoramento é rerrolar um afixo.$(p)Isso troca o afixo selecionado por outro do mesmo tipo a custo de um $(9)amuleto de aprimoramento$().$(p)As opções alternativas serão mostradas à esquerda."
+        }
+    ]
+}

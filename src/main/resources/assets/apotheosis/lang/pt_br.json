@@ -12,7 +12,8 @@
     "misc.apotheosis.affix_name.two": "%2$s %1$s",
 	"misc.apotheosis.affix_name.three": "%2$s %1$s %3$s",
 	"misc.apotheosis.affix_name.four": "%3$s %2$s %4$s de %1$s",
-	
+    "misc.apotheosis.affix_bounds": "[%s\u00A0-\u00A0%s]",
+
     "misc.apotheosis.radial_state_updated": "Modo de mineração radial atualizado para \"%s\"",
     "misc.apotheosis.radial_state.require_not_sneaking": "Desativado enquanto se agacha",
     "misc.apotheosis.radial_state.require_sneaking": "Habilitado enquanto se agacha",
@@ -287,10 +288,8 @@
 	"affix.apotheosis:armor/mob_effect/bursting": "Estrondoso",
 	"affix.apotheosis:armor/mob_effect/bursting.suffix": "da Vitalidade",
 
-    "affix.apotheosis:socket": "",
-	"affix.apotheosis:socket.suffix": "",
-	"affix.apotheosis:durable": "",
-	"affix.apotheosis:durable.suffix": "",
+    "affix.apotheosis:durable": "Durável",
+    "affix.apotheosis:durable.suffix": "da Durabilidade",
 
 	"affix.apotheosis.target.attack_self": "Ao acertar, ganha %s",
 	"affix.apotheosis.target.attack_target": "Ao acertar, infringe %s",
@@ -331,6 +330,7 @@
 	"gem_class.boots": "Botas",
 	"gem_class.shield": "Escudos",
 	"gem_class.heavy_weapon": "Armas pesadas",
+    "gem_class.anything": "Qualquer equipamento",
 
 	"bonus.apotheosis:durability.desc": "Ignora %s%% do dano de durabilidade",
 	"bonus.apotheosis:enchantment.desc": "+%s %s para %s",
@@ -393,11 +393,23 @@
 	"item.apotheosis.epic_material": "Areias arcanas",
 	"item.apotheosis.mythic_material": "Pérola forjada pelos deuses",
     "item.apotheosis.ancient_material": "Manifestaçäo do infinito",
-	"item.apotheosis.sigil_of_socketing": "Signo de encaixe",
-	"item.apotheosis.superior_sigil_of_socketing": "Signo de encaixe superior",
-	"item.apotheosis.sigil_of_enhancement": "[ANI] Signo de aprimoramento",
-	"item.apotheosis.superior_sigil_of_enhancement": "[ANI] Signo de aprimoramento superior",
+    "item.apotheosis.gem_fused_slate": "Ardósia fundida com gema",
+
+    "item.apotheosis.sigil_of_socketing": "Signo de encaixe",
+    "item.apotheosis.sigil_of_socketing.desc": "Adiciona um encaixe a um item",
+
+    "item.apotheosis.sigil_of_withdrawal": "Signo de retirada",
+    "item.apotheosis.sigil_of_withdrawal.desc": "Remove todas as gemas encaixadas de um item",
+
+    "item.apotheosis.sigil_of_rebirth": "Signo de renascimento",
+    "item.apotheosis.sigil_of_rebirth.desc": "Usado para abastecer a bancada de reforjação",
+
+    "item.apotheosis.sigil_of_enhancement": "Signo de aprimoramento",
+	"item.apotheosis.sigil_of_enhancement.desc": "Signo de aprimoramento superior",
 	
+    "item.apotheosis.sigil_of_unnaming": "Signo de desnomeação",
+    "item.apotheosis.sigil_of_unnaming.desc": "Remove o nome afixado de um item",
+
     "block.apotheosis.boss_spawner": "Gerador de chefe",
     "block.apotheosis.gem_cutting_table": "Bancada de lapidação de gema",
 	"block.apotheosis.gem_cutting_table.desc": "Usa pó de gema materiais de raridade para melhorar gemas",
@@ -407,12 +419,20 @@
 	"block.apotheosis.reforging_table": "Bancada de reforjação",
 	"block.apotheosis.reforging_table.desc": "Usa pó de gema e materiais de raridade para rolar novamente os afixos",
 	"block.apotheosis.reforging_table.desc2": "Raridade máxima: %s",
+    "block.apotheosis.augmenting_table": "Bancada de aprimoramento",
+    "block.apotheosis.augmenting_table.desc": "Usa signos de aprimoramento para aprimorar afixos individualmente",
 	
 	"button.apotheosis.salvage": "Itens de reciclagem",
 	"button.apotheosis.no_salvage": "Nenhum item selecionado",
 	"button.apotheosis.no_salvage_all": "Nenhum item válido no inventário",
     "button.apotheosis.upgrade": "Aprimorar gema",
 	"button.apotheosis.upgrade.no": "Itens ausentes",
+    "button.apotheosis.augmenting.upgrade": "Melhorar afixo selecionado",
+    "button.apotheosis.augmenting.reroll": "Rerrolar afixo selecionado",
+    "button.apotheosis.augmenting.no_selection": "Nenhum afixo selecionado",
+    "button.apotheosis.augmenting.max_level": "Já está no nível máximo",
+    "button.apotheosis.augmenting.no_alternatives": "Sem afixos alternativos",
+    "button.apotheosis.augmenting.upgrade.cost": "Custo: %sx %s",
 
 	"menu.apotheosis.gem_cutting": "Lapidação de gema",
     "container.apotheosis.salvage": "Reciclar",
@@ -426,9 +446,13 @@
 	"text.apotheosis.socketable_into": "Encaixa em:",
 	"text.apotheosis.dot_prefix": "• %s",
 	"text.apotheosis.socket_limit": "Máximo de encaixes aplicados: %s",
-    "text.apotheosis.no_upgrade": "Não pode ser melhorado",
+    "text.apotheosis.no_upgrade": "Melhoria máxima alcançada",
 	"text.apotheosis.cut_cost": "Custo de lapidação de gema",
 	"text.apotheosis.one_rarity_mat": "Materiais de raridade (1)",
+    "text.apotheosis.potential_rerolls": "Possíveis rerrolagens",
+    "text.apotheosis.upgraded_form": "Upgraded Form",
+    "text.apotheosis.alternative_page": "Página %s/%s (role para alterar)",
+
 	"title.apotheosis.smithing": "Ferraria apótica",
     "title.apotheosis.salvaging": "Reciclagem",
 
@@ -1158,7 +1182,8 @@
     "item.apotheosis.potion_charm.enabled": "Habilitado",
     "item.apotheosis.potion_charm.disabled": "Desabilitado",
 	"item.apotheosis.potion_charm.curios_only": "Funciona apenas em um encaixe de Curios",
-    
+    "misc.apotheosis.blacklisted_potion": "Não pode ser convertido em um amuleto de poção.",
+
     "comment_id": "/Anvil Module",
     "info.apotheosis.anvil": "Pode ser encantado.",
 
@@ -1181,13 +1206,17 @@
     "name.apotheosis.vigilance": "Vigília eterna",
     "apotheosis.recipes.fletching": "Flecharia",
     "item.apotheosis.obsidian_arrow": "Flecha de obsidiana",
+    "entity.apotheosis.obsidian_arrow": "Flecha de obsidiana",
     "info.apotheosis.obsidian_arrow": "+20%% dano",
     "item.apotheosis.broadhead_arrow": "Flecha de ponta larga",
+    "entity.apotheosis.broadhead_arrow": "Flecha de ponta larga",
     "info.apotheosis.broadhead_arrow": "Sangramento (0:15)",
     "item.apotheosis.explosive_arrow": "Flecha explosiva",
+    "entity.apotheosis.explosive_arrow": "Flecha explosiva",
     "info.apotheosis.explosive_arrow": "Raio de explosão: 2",
     "item.apotheosis.iron_mining_arrow": "Flecha de mineração de ferro",
     "item.apotheosis.diamond_mining_arrow": "Flecha de mineração de diamante",
+    "entity.apotheosis.mining_arrow": "Flecha de mineração",
     "info.apotheosis.mining_arrow.iron": "Quebra blocos como uma picareta de ferro",
     "info.apotheosis.mining_arrow.diamond": "Quebra blocos como uma picareta de diamante",
     
