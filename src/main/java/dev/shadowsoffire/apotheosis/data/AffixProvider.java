@@ -16,6 +16,7 @@ import dev.shadowsoffire.apotheosis.affix.AffixDefinition;
 import dev.shadowsoffire.apotheosis.affix.AffixRegistry;
 import dev.shadowsoffire.apotheosis.affix.AffixType;
 import dev.shadowsoffire.apotheosis.affix.AttributeAffix;
+import dev.shadowsoffire.apotheosis.affix.effect.AttributeToggleAffix;
 import dev.shadowsoffire.apotheosis.affix.effect.CatalyzingAffix;
 import dev.shadowsoffire.apotheosis.affix.effect.CleavingAffix;
 import dev.shadowsoffire.apotheosis.affix.effect.DamageReductionAffix;
@@ -927,6 +928,27 @@ public class AffixProvider extends DynamicRegistryProvider<Affix> {
                 .value(epic, 0.10F, 0.20F)
                 .value(mythic, 0.15F, 0.25F)
                 .build());
+
+        // Boots Abilities
+
+        this.add(Apotheosis.loc("boots/ability/unhurried"), new AttributeToggleAffix(
+            AffixDefinition.builder(AffixType.ABILITY).weights(TieredWeights.forAllTiers(DEFAULT_WEIGHT, DEFAULT_QUALITY)).build(),
+            ApothMiscUtil.linkedSet(Attributes.MOVEMENT_SPEED),
+            linkedSet(epic, mythic)));
+
+        this.add(Apotheosis.loc("boots/ability/surefooted"), new AttributeToggleAffix(
+            AffixDefinition.builder(AffixType.ABILITY).weights(TieredWeights.forAllTiers(DEFAULT_WEIGHT, DEFAULT_QUALITY)).build(),
+            ApothMiscUtil.linkedSet(Attributes.STEP_HEIGHT),
+            linkedSet(epic, mythic)));
+
+        this.add(Apotheosis.loc("boots/ability/steadfast"), new AttributeToggleAffix(
+            AffixDefinition.builder(AffixType.ABILITY)
+                .weights(TieredWeights.onlyFor(WorldTier.PINNACLE, 20, 0.75F))
+                .exclusiveWith(afx("boots/ability/unhurried"))
+                .exclusiveWith(afx("boots/ability/surefooted"))
+                .build(),
+            ApothMiscUtil.linkedSet(Attributes.MOVEMENT_SPEED, Attributes.STEP_HEIGHT),
+            linkedSet(mythic)));
 
         // Shield Abilities
 

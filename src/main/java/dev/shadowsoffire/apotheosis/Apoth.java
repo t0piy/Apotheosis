@@ -20,6 +20,7 @@ import dev.shadowsoffire.apotheosis.affix.UnnamingRecipe;
 import dev.shadowsoffire.apotheosis.affix.augmenting.AugmentingMenu;
 import dev.shadowsoffire.apotheosis.affix.augmenting.AugmentingTableBlock;
 import dev.shadowsoffire.apotheosis.affix.augmenting.AugmentingTableTile;
+import dev.shadowsoffire.apotheosis.affix.effect.AttributeToggleAffix;
 import dev.shadowsoffire.apotheosis.affix.reforging.ReforgingMenu;
 import dev.shadowsoffire.apotheosis.affix.reforging.ReforgingRecipe;
 import dev.shadowsoffire.apotheosis.affix.reforging.ReforgingTableBlock;
@@ -29,6 +30,7 @@ import dev.shadowsoffire.apotheosis.affix.salvaging.SalvagingMenu;
 import dev.shadowsoffire.apotheosis.affix.salvaging.SalvagingRecipe;
 import dev.shadowsoffire.apotheosis.affix.salvaging.SalvagingTableBlock;
 import dev.shadowsoffire.apotheosis.affix.salvaging.SalvagingTableTile;
+import dev.shadowsoffire.apotheosis.attachments.AttributeToggles;
 import dev.shadowsoffire.apotheosis.attachments.BonusLootTables;
 import dev.shadowsoffire.apotheosis.attachments.DamageReductions;
 import dev.shadowsoffire.apotheosis.gen.BlacklistModifier;
@@ -39,6 +41,7 @@ import dev.shadowsoffire.apotheosis.gen.RogueSpawnerFeature;
 import dev.shadowsoffire.apotheosis.item.BossSummonerItem;
 import dev.shadowsoffire.apotheosis.item.GlowyItem;
 import dev.shadowsoffire.apotheosis.item.PotionCharmItem;
+import dev.shadowsoffire.apotheosis.item.SpawnerChainItem;
 import dev.shadowsoffire.apotheosis.item.TooltipItem;
 import dev.shadowsoffire.apotheosis.item.TooltipItem.GlowyTooltipItem;
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
@@ -267,8 +270,10 @@ public class Apoth {
         public static final AttachmentType<Integer> AFFIX_EFFECT_NEXT_PARTICLE_TIME = R.attachment("affix_effect_next_particle_time", () -> 0, UnaryOperator.identity());
 
         /**
-         * Client-only attachment to record the time (in ticks, relative to the entity tick count) at which the next affix effect particle spawns.
+         * Holds the set of attributes whose bonuses the player has chosen to suppress via an {@link AttributeToggleAffix}.
          */
+        public static final AttachmentType<AttributeToggles> ATTRIBUTE_TOGGLES = R.attachment("attribute_toggles", () -> AttributeToggles.EMPTY, b -> b.serialize(AttributeToggles.CODEC, t -> !t.isEmpty()).copyOnDeath());
+
         public static final AttachmentType<RadialState> RADIAL_MINING_MODE = R.attachment("radial_mining_mode", () -> RadialState.REQUIRE_NOT_SNEAKING, b -> b.serialize(RadialState.CODEC).copyOnDeath());
 
         private static void bootstrap() {}
@@ -367,7 +372,7 @@ public class Apoth {
 
         public static final Holder<Item> MUSIC_DISC_SHIMMER = R.item("music_disc_shimmer", Item::new, p -> p.rarity(Rarity.RARE).stacksTo(1).jukeboxPlayable(Songs.SHIMMER));
 
-        public static final Holder<Item> SPAWNER_CHAIN = R.item("spawner_chain", TooltipItem::new);
+        public static final Holder<Item> SPAWNER_CHAIN = R.item("spawner_chain", SpawnerChainItem::new);
         public static final Holder<Item> SPAWNER_RUNE = R.item("spawner_rune", Item::new);
         public static final Holder<Item> INFUSED_SPAWNER_RUNE = R.item("infused_spawner_rune", GlowyItem::new, p -> p.rarity(Rarity.UNCOMMON));
 

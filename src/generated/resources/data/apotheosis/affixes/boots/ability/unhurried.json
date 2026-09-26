@@ -1,0 +1,18 @@
+{
+    "type": "apotheosis:attribute_toggle",
+    "attributes": [
+        "minecraft:generic.movement_speed"
+    ],
+    "definition": {
+        "affix_type": "ability",
+        "exclusive_set": [],
+        "weights": {
+            "quality": 0.1,
+            "weight": 25
+        }
+    },
+    "rarities": [
+        "apotheosis:epic",
+        "apotheosis:mythic"
+    ]
+}
