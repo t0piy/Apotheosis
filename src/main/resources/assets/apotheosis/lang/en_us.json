@@ -725,6 +725,7 @@
     "text.apotheosis.malice_marker": "Malice will be applied on craft",
     "text.apotheosis.touched_by_malice": "Touched by Malice (x%s)",
     "text.apotheosis.malice_notice": "Malice: %s consumed the strength of %s",
+    "text.apotheosis.malice_notice_final": "Malice intertwines with %s and fully claims your item!",
 
     "title.apotheosis.salvaging": "Salvaging",
     "title.apotheosis.stoneforming": "Stoneforming",
@@ -1015,5 +1016,5 @@
     "comment_id": "Guidebook",
     "book.apotheosis.name": "Chronicle of Shadows",
     "book.apotheosis.subtitle": "Guide to Apotheosis",
-    "book.apotheosis.landing": "Welcome to the world of Apotheosis.$(br2)Apotheosis is organized into $(#8080FF)Modules$(), and so is the content of this book.$(br2)Disabled modules are hidden."
+    "book.apotheosis.landing": "Welcome to the world of Apotheosis.$(br2)Apotheosis is one of the $(#8080FF)Apothic$() mods, and this book covers all of them.$(br2)Sections only appear when the matching mod is installed."
 }
